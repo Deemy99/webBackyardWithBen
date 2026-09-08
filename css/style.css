@@ -3820,6 +3820,107 @@ button {
 }
 
 
+/* Plain lists / images / quotes inside article body content
+   (available to any content_html pasted into a Supabase-backed
+   article, not just the hand-written static article) */
+
+.article-body ul,
+.article-section ul,
+.article-body ol,
+.article-section ol {
+    margin: 0 0 24px 4px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.article-body ul li,
+.article-section ul li {
+    position: relative;
+
+    padding-left: 24px;
+
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 18px;
+    line-height: 1.8;
+
+    color: #424843;
+}
+
+.article-body ul li::before,
+.article-section ul li::before {
+    content: "";
+
+    position: absolute;
+    left: 0;
+    top: 11px;
+
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: var(--green);
+}
+
+.article-body ol,
+.article-section ol {
+    counter-reset: article-ol;
+}
+
+.article-body ol li,
+.article-section ol li {
+    position: relative;
+
+    padding-left: 28px;
+
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 18px;
+    line-height: 1.8;
+
+    color: #424843;
+
+    counter-increment: article-ol;
+}
+
+.article-body ol li::before,
+.article-section ol li::before {
+    content: counter(article-ol) ".";
+
+    position: absolute;
+    left: 0;
+
+    font-weight: 800;
+    color: var(--green-dark);
+}
+
+.article-body img,
+.article-section img {
+    margin: 8px 0 28px;
+
+    border-radius: 16px;
+
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+.article-body blockquote,
+.article-section blockquote {
+    margin: 28px 0;
+
+    padding: 4px 0 4px 22px;
+
+    border-left: 3px solid var(--green);
+
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 19px;
+    font-style: italic;
+    line-height: 1.8;
+
+    color: #3c433d;
+}
+
+
 /* =========================================================
    ARTICLE TAKEAWAYS (TL;DR box)
 ========================================================= */

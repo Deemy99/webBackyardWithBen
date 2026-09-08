@@ -1,23 +1,24 @@
 /* =========================================================
-   BLOG ARTICLES (Supabase)
+   HOMEPAGE LATEST ARTICLES (Supabase)
 
-   Runs only on blogs.html. Fetches published articles from
-   Supabase and generates .article-card.blog-card elements
-   matching the site's existing hand-written card markup, so
-   the category filter / live search in js/main.js (which
-   just queries .blog-card and reads data-category/data-title)
-   keeps working unmodified against them.
+   Runs only on index.html. Fetches the 2 most recently
+   published articles from Supabase and replaces the static
+   "Latest From Ben" cards with real ones, so the homepage
+   always reflects the newest published content instead of
+   staying stuck on whichever article was hand-written into
+   the HTML at launch.
 
-   Inserted cards go before the "coming soon" filler cards so
-   those always stay last. Any error/empty result degrades
-   silently to today's static state (1 real article + 2
-   filler cards) — no user-facing error needed.
+   If fewer than 2 published articles exist, the remaining
+   slot keeps the "more articles coming soon" filler card.
+   Any error/empty result degrades silently to the existing
+   static markup already in the page — no user-facing error
+   needed.
 ========================================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
 
     const grid =
-        document.querySelector(".blog-articles-grid");
+        document.querySelector(".articles-grid--pair");
 
     if (!grid || typeof supabaseClient === "undefined") {
         return;
@@ -73,9 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const card = document.createElement("article");
 
-        card.className = "article-card blog-card";
-        card.dataset.category = article.category;
-        card.dataset.title = (article.title || "").toLowerCase();
+        card.className = "article-card";
 
         const safeTitle = escapeHtml(article.title);
         const safeExcerpt = escapeHtml(article.excerpt);
@@ -104,47 +103,60 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
+    function buildSoonCard() {
+
+        const card = document.createElement("article");
+
+        card.className = "article-card article-card-soon";
+
+        card.innerHTML = `
+            <span class="article-card-soon-icon">🌿</span>
+            <h3>More Articles Coming Soon</h3>
+            <p>
+                Ben is working on new gardening, landscaping and
+                DIY guides. Check back soon or browse the blog
+                for what's already live.
+            </p>
+            <a href="blogs.html" class="read-more">Browse the Blog →</a>
+        `;
+
+        return card;
+
+    }
+
+
     supabaseClient
         .from("articles")
         .select("slug,title,excerpt,category,cover_image_url,cover_image_alt,published_at")
         .eq("published", true)
         .order("published_at", { ascending: false })
+        .limit(2)
         .then(({ data, error }) => {
 
             if (error || !data || data.length === 0) {
 
                 if (error) {
-                    console.warn("Could not load articles from Supabase:", error.message);
+                    console.warn("Could not load latest articles from Supabase:", error.message);
                 }
 
                 return;
 
             }
 
-            const soonCard =
-                grid.querySelector(".article-card-soon");
+            grid.innerHTML = "";
 
             data.forEach((article) => {
-
-                const card = buildCard(article);
-
-                if (soonCard) {
-                    grid.insertBefore(card, soonCard);
-                } else {
-                    grid.appendChild(card);
-                }
-
+                grid.appendChild(buildCard(article));
             });
+
+            if (data.length < 2) {
+                grid.appendChild(buildSoonCard());
+            }
 
         })
         .catch((error) => {
 
-            console.warn("Could not load articles from Supabase:", error);
-
-        })
-        .finally(() => {
-
-            document.dispatchEvent(new CustomEvent("blog:cards-loaded"));
+            console.warn("Could not load latest articles from Supabase:", error);
 
         });
 
