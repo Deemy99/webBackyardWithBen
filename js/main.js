@@ -519,38 +519,88 @@ document.addEventListener("DOMContentLoaded", () => {
             emailInput.style.outline = "none";
 
 
-            /*
-                Temporary success state.
-
-                Later we can connect this to:
-                Mailchimp
-                Beehiiv
-                ConvertKit
-                Brevo
-                etc.
-            */
-
             const originalButtonHTML =
                 submitButton.innerHTML;
 
 
-            submitButton.innerHTML =
-                "You're In! ✓";
+            /*
+                Real signup, stored in Supabase (see
+                js/supabase-config.js). Actual newsletter sending
+                is handled later by a dedicated email provider —
+                this just durably captures the subscriber.
 
+                Falls back to a visual-only success state if
+                supabaseClient isn't available (e.g. the page
+                hasn't loaded js/supabase-config.js, or it's still
+                using the TODO placeholder values).
+            */
+
+            if (typeof supabaseClient === "undefined") {
+
+                submitButton.innerHTML = "You're In! ✓";
+                submitButton.disabled = true;
+
+                emailInput.value = "";
+
+                setTimeout(() => {
+
+                    submitButton.innerHTML = originalButtonHTML;
+                    submitButton.disabled = false;
+
+                }, 3500);
+
+                return;
+
+            }
+
+
+            submitButton.innerHTML = "Joining...";
             submitButton.disabled = true;
 
+            const source =
+                form.classList.contains("footer-newsletter-form")
+                    ? "footer"
+                    : "inline";
 
-            emailInput.value = "";
+            supabaseClient
+                .from("newsletter_subscribers")
+                .insert({ email, source })
+                .then(({ error }) => {
 
+                    if (!error) {
 
-            setTimeout(() => {
+                        submitButton.innerHTML = "You're In! ✓";
+                        emailInput.value = "";
 
-                submitButton.innerHTML =
-                    originalButtonHTML;
+                    } else if (error.code === "23505") {
 
-                submitButton.disabled = false;
+                        submitButton.innerHTML = "Already Subscribed ✓";
+                        emailInput.value = "";
 
-            }, 3500);
+                    } else {
+
+                        submitButton.innerHTML = "Try Again";
+                        emailInput.style.outline = "2px solid #d95757";
+
+                    }
+
+                })
+                .catch(() => {
+
+                    submitButton.innerHTML = "Try Again";
+                    emailInput.style.outline = "2px solid #d95757";
+
+                })
+                .finally(() => {
+
+                    setTimeout(() => {
+
+                        submitButton.innerHTML = originalButtonHTML;
+                        submitButton.disabled = false;
+
+                    }, 3500);
+
+                });
 
         });
 
@@ -568,6 +618,162 @@ document.addEventListener("DOMContentLoaded", () => {
             /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         return emailRegex.test(email);
+
+    }
+
+
+
+    /* =====================================================
+       CONTACT FORM
+
+       Submits to Formspree (see contact.html form action)
+       via fetch so we can show an inline success/error
+       state instead of a full page redirect.
+    ====================================================== */
+
+    const contactForm =
+        document.querySelector("#contact-form");
+
+    if (contactForm) {
+
+        const contactMessage =
+            contactForm.querySelector(".contact-form-message");
+
+        contactForm.addEventListener("submit", (event) => {
+
+            event.preventDefault();
+
+            const emailInput =
+                contactForm.querySelector('input[type="email"]');
+
+            const submitButton =
+                contactForm.querySelector('button[type="submit"]');
+
+            if (!emailInput || !submitButton) {
+                return;
+            }
+
+            if (!isValidEmail(emailInput.value.trim())) {
+
+                emailInput.focus();
+
+                showContactMessage(
+                    "Please enter a valid email address.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+            const originalButtonHTML =
+                submitButton.innerHTML;
+
+            submitButton.innerHTML = "Sending...";
+            submitButton.disabled = true;
+
+            fetch(contactForm.action, {
+                method: "POST",
+                body: new FormData(contactForm),
+                headers: {
+                    Accept: "application/json"
+                }
+            })
+                .then((response) => {
+
+                    if (response.ok) {
+
+                        contactForm.reset();
+
+                        showContactMessage(
+                            "Thanks! Your message has been sent. We'll get back to you soon.",
+                            "success"
+                        );
+
+                    } else {
+
+                        showContactMessage(
+                            "Something went wrong sending your message. Please try again or email us directly.",
+                            "error"
+                        );
+
+                    }
+
+                })
+                .catch(() => {
+
+                    showContactMessage(
+                        "Something went wrong sending your message. Please try again or email us directly.",
+                        "error"
+                    );
+
+                })
+                .finally(() => {
+
+                    submitButton.innerHTML = originalButtonHTML;
+                    submitButton.disabled = false;
+
+                });
+
+        });
+
+        function showContactMessage(text, type) {
+
+            if (!contactMessage) {
+                return;
+            }
+
+            contactMessage.textContent = text;
+
+            contactMessage.classList.remove("success", "error");
+            contactMessage.classList.add("show", type);
+
+        }
+
+    }
+
+
+
+    /* =====================================================
+       STICKY ANCHOR AD (dismissible bottom bar)
+    ====================================================== */
+
+    const stickyAnchorAd =
+        document.querySelector("#sticky-anchor-ad");
+
+    if (stickyAnchorAd) {
+
+        const closeButton =
+            stickyAnchorAd.querySelector("#sticky-anchor-ad-close");
+
+        let alreadyDismissed = false;
+
+        try {
+            alreadyDismissed =
+                sessionStorage.getItem("stickyAdDismissed") === "true";
+        } catch (error) {
+            alreadyDismissed = false;
+        }
+
+        if (alreadyDismissed) {
+            stickyAnchorAd.hidden = true;
+        }
+
+        if (closeButton) {
+
+            closeButton.addEventListener("click", () => {
+
+                stickyAnchorAd.hidden = true;
+
+                try {
+                    sessionStorage.setItem("stickyAdDismissed", "true");
+                } catch (error) {
+                    /* sessionStorage unavailable (private mode, etc.) — ignore */
+                }
+
+            });
+
+        }
 
     }
 
@@ -712,7 +918,7 @@ document.addEventListener("DOMContentLoaded", () => {
 const blogCategoryButtons =
     document.querySelectorAll(".blog-category-button");
 
-const blogCards =
+let blogCards =
     Array.from(document.querySelectorAll(".blog-card"));
 
 const blogSearchInput =
@@ -725,335 +931,367 @@ const blogLoadMore =
     document.querySelector(".blog-load-more");
 
 
-if (blogCards.length > 0) {
-
-    let selectedCategory = "all";
-    let searchQuery = "";
+let selectedCategory = "all";
+let searchQuery = "";
+let blogFilterInitialized = false;
+
+
+/* =================================================
+   NORMALIZE TEXT
+   Makes searching easier and case-insensitive
+================================================== */
+
+function normalizeText(text) {
+
+    return text
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, " ");
+
+}
+
+
+/* =================================================
+   GET SEARCHABLE ARTICLE TEXT
+================================================== */
+
+function getCardSearchText(card) {
+
+    const title =
+        card.dataset.title || "";
+
+    const category =
+        card.dataset.category || "";
+
+    const heading =
+        card.querySelector("h3")?.textContent || "";
+
+    const description =
+        card.querySelector(".article-content p")?.textContent || "";
+
+    const categoryLabel =
+        card.querySelector(".article-category")?.textContent || "";
+
+
+    return normalizeText(
+        title +
+        " " +
+        category +
+        " " +
+        heading +
+        " " +
+        description +
+        " " +
+        categoryLabel
+    );
+
+}
+
+
+/* =================================================
+   SYNONYMS / RELATED WORDS
+================================================== */
+
+const searchSynonyms = {
+
+    garden: [
+        "garden",
+        "gardening",
+        "plants",
+        "flowers",
+        "planting"
+    ],
+
+    gardening: [
+        "garden",
+        "gardening",
+        "plants",
+        "flowers",
+        "planting"
+    ],
+
+    flower: [
+        "flower",
+        "flowers",
+        "garden",
+        "gardening",
+        "plants"
+    ],
+
+    flowers: [
+        "flower",
+        "flowers",
+        "garden",
+        "gardening",
+        "plants"
+    ],
+
+    lawn: [
+        "lawn",
+        "grass",
+        "yard",
+        "mowing"
+    ],
+
+    grass: [
+        "grass",
+        "lawn",
+        "yard"
+    ],
+
+    tree: [
+        "tree",
+        "trees",
+        "landscaping"
+    ],
+
+    trees: [
+        "tree",
+        "trees",
+        "landscaping"
+    ],
 
-
-    /* =================================================
-       NORMALIZE TEXT
-       Makes searching easier and case-insensitive
-    ================================================== */
-
-    function normalizeText(text) {
-
-        return text
-            .toLowerCase()
-            .trim()
-            .replace(/\s+/g, " ");
-
-    }
-
-
-    /* =================================================
-       GET SEARCHABLE ARTICLE TEXT
-    ================================================== */
-
-    function getCardSearchText(card) {
-
-        const title =
-            card.dataset.title || "";
-
-        const category =
-            card.dataset.category || "";
-
-        const heading =
-            card.querySelector("h3")?.textContent || "";
-
-        const description =
-            card.querySelector(".article-content p")?.textContent || "";
-
-        const categoryLabel =
-            card.querySelector(".article-category")?.textContent || "";
-
-
-        return normalizeText(
-            title +
-            " " +
-            category +
-            " " +
-            heading +
-            " " +
-            description +
-            " " +
-            categoryLabel
-        );
-
-    }
-
-
-    /* =================================================
-       SYNONYMS / RELATED WORDS
-    ================================================== */
-
-    const searchSynonyms = {
-
-        garden: [
-            "garden",
-            "gardening",
-            "plants",
-            "flowers",
-            "planting"
-        ],
-
-        gardening: [
-            "garden",
-            "gardening",
-            "plants",
-            "flowers",
-            "planting"
-        ],
-
-        flower: [
-            "flower",
-            "flowers",
-            "garden",
-            "gardening",
-            "plants"
-        ],
-
-        flowers: [
-            "flower",
-            "flowers",
-            "garden",
-            "gardening",
-            "plants"
-        ],
-
-        lawn: [
-            "lawn",
-            "grass",
-            "yard",
-            "mowing"
-        ],
-
-        grass: [
-            "grass",
-            "lawn",
-            "yard"
-        ],
-
-        tree: [
-            "tree",
-            "trees",
-            "landscaping"
-        ],
-
-        trees: [
-            "tree",
-            "trees",
-            "landscaping"
-        ],
+    patio: [
+        "patio",
+        "outdoor living",
+        "deck",
+        "backyard"
+    ],
 
-        patio: [
-            "patio",
-            "outdoor living",
-            "deck",
-            "backyard"
-        ],
+    deck: [
+        "deck",
+        "patio",
+        "outdoor living",
+        "diy"
+    ],
 
-        deck: [
-            "deck",
-            "patio",
-            "outdoor living",
-            "diy"
-        ],
+    grill: [
+        "grill",
+        "grilling",
+        "bbq",
+        "barbecue"
+    ],
 
-        grill: [
-            "grill",
-            "grilling",
-            "bbq",
-            "barbecue"
-        ],
+    grilling: [
+        "grill",
+        "grilling",
+        "bbq",
+        "barbecue"
+    ],
 
-        grilling: [
-            "grill",
-            "grilling",
-            "bbq",
-            "barbecue"
-        ],
+    bbq: [
+        "bbq",
+        "grill",
+        "grilling",
+        "barbecue"
+    ],
 
-        bbq: [
-            "bbq",
-            "grill",
-            "grilling",
-            "barbecue"
-        ],
+    diy: [
+        "diy",
+        "projects",
+        "build",
+        "backyard projects"
+    ],
 
-        diy: [
-            "diy",
-            "projects",
-            "build",
-            "backyard projects"
-        ],
+    pool: [
+        "pool",
+        "pools",
+        "outdoor living"
+    ],
 
-        pool: [
-            "pool",
-            "pools",
-            "outdoor living"
-        ],
+    birds: [
+        "birds",
+        "wildlife",
+        "plants",
+        "garden"
+    ],
 
-        birds: [
-            "birds",
-            "wildlife",
-            "plants",
-            "garden"
-        ],
+    landscaping: [
+        "landscaping",
+        "landscape",
+        "yard",
+        "garden",
+        "trees"
+    ]
 
-        landscaping: [
-            "landscaping",
-            "landscape",
-            "yard",
-            "garden",
-            "trees"
-        ]
+};
 
-    };
 
+/* =================================================
+   EXPAND SEARCH QUERY
+================================================== */
 
-    /* =================================================
-       EXPAND SEARCH QUERY
-    ================================================== */
+function getSearchTerms(query) {
 
-    function getSearchTerms(query) {
+    const words =
+        normalizeText(query)
+            .split(" ")
+            .filter(Boolean);
 
-        const words =
-            normalizeText(query)
-                .split(" ")
-                .filter(Boolean);
 
+    const terms = new Set(words);
 
-        const terms = new Set(words);
 
+    words.forEach(word => {
 
-        words.forEach(word => {
+        if (searchSynonyms[word]) {
 
-            if (searchSynonyms[word]) {
+            searchSynonyms[word].forEach(term => {
 
-                searchSynonyms[word].forEach(term => {
+                terms.add(term);
 
-                    terms.add(term);
+            });
 
-                });
+        }
 
-            }
+    });
 
-        });
 
+    return Array.from(terms);
 
-        return Array.from(terms);
+}
 
-    }
 
+/* =================================================
+   FILTER ARTICLES
+================================================== */
 
-    /* =================================================
-       FILTER ARTICLES
-    ================================================== */
+function filterArticles() {
 
-    function filterArticles() {
+    let visibleCards = [];
 
-        let visibleCards = [];
 
+    const searchTerms =
+        getSearchTerms(searchQuery);
 
-        const searchTerms =
-            getSearchTerms(searchQuery);
 
+    blogCards.forEach(card => {
 
-        blogCards.forEach(card => {
+        const cardCategory =
+            card.dataset.category;
 
-            const cardCategory =
-                card.dataset.category;
+        const searchableText =
+            getCardSearchText(card);
 
-            const searchableText =
-                getCardSearchText(card);
 
+        /* CATEGORY MATCH */
 
-            /* CATEGORY MATCH */
+        const categoryMatches =
+            selectedCategory === "all" ||
+            cardCategory === selectedCategory;
 
-            const categoryMatches =
-                selectedCategory === "all" ||
-                cardCategory === selectedCategory;
 
+        /* SEARCH MATCH */
 
-            /* SEARCH MATCH */
+        let searchMatches = true;
 
-            let searchMatches = true;
 
+        if (searchQuery.length > 0) {
 
-            if (searchQuery.length > 0) {
+            searchMatches =
+                searchTerms.some(term =>
 
-                searchMatches =
-                    searchTerms.some(term =>
+                    searchableText.includes(term)
 
-                        searchableText.includes(term)
-
-                    );
-
-            }
-
-
-            /* FINAL RESULT */
-
-            if (categoryMatches && searchMatches) {
-
-                card.hidden = false;
-
-                visibleCards.push(card);
-
-            } else {
-
-                card.hidden = true;
-
-            }
-
-        });
-
-
-        /* =================================================
-           NO RESULTS MESSAGE
-        ================================================== */
-
-        if (blogNoResults) {
-
-            if (visibleCards.length === 0) {
-
-                blogNoResults.classList.add("show");
-
-            } else {
-
-                blogNoResults.classList.remove("show");
-
-            }
+                );
 
         }
 
 
-        /* =================================================
-           LOAD MORE BUTTON
+        /* FINAL RESULT */
 
-           Hide it while filtering/searching because right
-           now all matching results should be visible.
-        ================================================== */
+        if (categoryMatches && searchMatches) {
 
-        if (blogLoadMore) {
+            card.hidden = false;
 
-            if (
-                selectedCategory !== "all" ||
-                searchQuery.length > 0
-            ) {
+            visibleCards.push(card);
 
-                blogLoadMore.style.display = "none";
+        } else {
 
-            } else {
+            card.hidden = true;
 
-                blogLoadMore.style.display = "flex";
+        }
 
-            }
+    });
+
+
+    /* =================================================
+       NO RESULTS MESSAGE
+    ================================================== */
+
+    if (blogNoResults) {
+
+        if (visibleCards.length === 0) {
+
+            blogNoResults.classList.add("show");
+
+        } else {
+
+            blogNoResults.classList.remove("show");
 
         }
 
     }
+
+
+    /* =================================================
+       LOAD MORE BUTTON
+
+       Hide it while filtering/searching because right
+       now all matching results should be visible.
+    ================================================== */
+
+    if (blogLoadMore) {
+
+        if (
+            selectedCategory !== "all" ||
+            searchQuery.length > 0
+        ) {
+
+            blogLoadMore.style.display = "none";
+
+        } else {
+
+            blogLoadMore.style.display = "flex";
+
+        }
+
+    }
+
+}
+
+
+/* =================================================
+   SET UP / RE-SCAN BLOG CARDS
+
+   Called once at page load, and again whenever
+   dynamically-loaded (Supabase) cards finish inserting
+   (see js/blog-articles.js, which dispatches
+   "blog:cards-loaded" after appending new cards). The
+   category-button and search-input listeners only ever
+   get attached once, guarded by blogFilterInitialized —
+   re-running this just re-collects blogCards and
+   re-filters.
+================================================== */
+
+function setupBlogFilter() {
+
+    blogCards =
+        Array.from(document.querySelectorAll(".blog-card"));
+
+    if (blogCards.length === 0) {
+        return;
+    }
+
+    if (blogFilterInitialized) {
+
+        filterArticles();
+
+        return;
+
+    }
+
+    blogFilterInitialized = true;
 
 
     /* =================================================
@@ -1146,7 +1384,7 @@ if (blogCards.length > 0) {
        CATEGORY FROM URL
 
        Example:
-       blog.html?category=gardening
+       blogs.html?category=gardening
     ================================================== */
 
     const urlParams =
@@ -1191,12 +1429,13 @@ if (blogCards.length > 0) {
     }
 
 
-    /* =================================================
-       INITIAL FILTER
-    ================================================== */
-
     filterArticles();
 
 }
+
+
+setupBlogFilter();
+
+document.addEventListener("blog:cards-loaded", setupBlogFilter);
 
 });

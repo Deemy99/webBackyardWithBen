@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- TODO: replace https://www.backyardwithben.com/ placeholder domain with the real production domain before launch (affects canonical/OG/sitemap URLs across all pages). -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -11,8 +12,37 @@
         content="Backyard with Ben brings you practical backyard ideas, gardening tips, landscaping inspiration, BBQ guides, DIY projects and everything you need for better outdoor living."
     >
 
-    <link rel="icon" href="assets/images/backyardwithbenprofil.png">
+    <link rel="canonical" href="https://www.backyardwithben.com/">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Backyard with Ben">
+    <meta property="og:title" content="Backyard with Ben | Ideas for Better Outdoor Living">
+    <meta property="og:description" content="Practical backyard ideas, gardening tips, landscaping inspiration, BBQ guides and DIY projects for better outdoor living.">
+    <meta property="og:url" content="https://www.backyardwithben.com/">
+    <meta property="og:image" content="https://www.backyardwithben.com/assets/images/og-image.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Backyard with Ben | Ideas for Better Outdoor Living">
+    <meta name="twitter:description" content="Practical backyard ideas, gardening tips, landscaping inspiration, BBQ guides and DIY projects for better outdoor living.">
+    <meta name="twitter:image" content="https://www.backyardwithben.com/assets/images/og-image.jpg">
+
+    <link rel="icon" href="assets/images/backyardwithbenprofil.jpg">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="css/style.css">
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Backyard with Ben",
+        "url": "https://www.backyardwithben.com/",
+        "logo": "https://www.backyardwithben.com/assets/images/backyardwithbenprofil.jpg",
+        "sameAs": []
+    }
+    </script>
 </head>
 
 <body>
@@ -28,8 +58,10 @@
             <!-- Logo = Home button -->
             <a href="index.html" class="site-logo" aria-label="Backyard with Ben Home">
                 <img
-                    src="assets/images/backyardwithbenprofil.png"
+                    src="assets/images/backyardwithbenprofil.jpg"
                     alt="Backyard with Ben"
+                    width="78"
+                    height="78"
                 >
             </a>
 
@@ -53,6 +85,12 @@
                     <li>
                         <a href="about.html">
                             About Us
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="contact.html">
+                            Contact
                         </a>
                     </li>
 
@@ -105,8 +143,10 @@
                 <article class="hero-slide active">
 
                     <img
-                        src="assets/images/benwebimg1.png"
+                        src="assets/images/benwebimg1.jpg"
                         alt="Beautiful traditional American backyard with a wooden deck and grill"
+                        width="1672"
+                        height="941"
                     >
 
                     <div class="hero-overlay"></div>
@@ -142,8 +182,11 @@
                 <article class="hero-slide">
 
                     <img
-                        src="assets/images/benwebimg2.png"
+                        src="assets/images/benwebimg2.jpg"
                         alt="Backyard garden with colorful flowers and landscaping"
+                        width="1672"
+                        height="941"
+                        loading="lazy"
                     >
 
                     <div class="hero-overlay"></div>
@@ -179,8 +222,11 @@
                 <article class="hero-slide">
 
                     <img
-                        src="assets/images/benwebimg3.png"
+                        src="assets/images/benwebimg3.jpg"
                         alt="American backyard patio with outdoor kitchen and barbecue grill"
+                        width="1672"
+                        height="941"
+                        loading="lazy"
                     >
 
                     <div class="hero-overlay"></div>
@@ -216,8 +262,11 @@
                 <article class="hero-slide">
 
                     <img
-                        src="assets/images/benwebimg4.png"
+                        src="assets/images/benwebimg4.jpg"
                         alt="Backyard transformation with wooden deck and beautiful lawn"
+                        width="1672"
+                        height="941"
+                        loading="lazy"
                     >
 
                     <div class="hero-overlay"></div>
@@ -365,6 +414,9 @@
                         <img
                             src="assets/images/categories/gardening.jpg"
                             alt="Beautiful backyard garden"
+                            width="1672"
+                            height="941"
+                            loading="lazy"
                         >
 
                         <div class="category-overlay"></div>
@@ -382,6 +434,9 @@
                         <img
                             src="assets/images/categories/landscaping.jpg"
                             alt="Professional backyard landscaping"
+                            width="1672"
+                            height="941"
+                            loading="lazy"
                         >
 
                         <div class="category-overlay"></div>
@@ -399,6 +454,9 @@
                         <img
                             src="assets/images/categories/patio.jpg"
                             alt="American backyard patio"
+                            width="1672"
+                            height="941"
+                            loading="lazy"
                         >
 
                         <div class="category-overlay"></div>
@@ -416,6 +474,9 @@
                         <img
                             src="assets/images/categories/bbq.jpg"
                             alt="Outdoor barbecue grill"
+                            width="1672"
+                            height="941"
+                            loading="lazy"
                         >
 
                         <div class="category-overlay"></div>
@@ -433,6 +494,9 @@
                         <img
                             src="assets/images/categories/diy.jpg"
                             alt="Backyard DIY project"
+                            width="1672"
+                            height="941"
+                            loading="lazy"
                         >
 
                         <div class="category-overlay"></div>
@@ -450,6 +514,9 @@
                         <img
                             src="assets/images/categories/lawn.jpg"
                             alt="Healthy green American lawn"
+                            width="1672"
+                            height="941"
+                            loading="lazy"
                         >
 
                         <div class="category-overlay"></div>
@@ -496,20 +563,23 @@
                 </div>
 
 
-                <div class="articles-grid">
+                <div class="articles-grid articles-grid--pair">
 
 
                     <article class="article-card">
 
-                        <a href="article.html" class="article-image">
+                        <a href="articles/gardening-mistakes.html" class="article-image">
 
                             <img
-                                src="assets/images/articles/article-1.jpg"
-                                alt="Backyard landscaping ideas"
+                                src="assets/images/articles/gardening-mistakes.jpg"
+                                alt="Beautiful backyard garden with flowers and plants"
+                                width="1672"
+                                height="941"
+                                loading="lazy"
                             >
 
                             <span class="article-category">
-                                Landscaping
+                                Gardening
                             </span>
 
                         </a>
@@ -517,23 +587,23 @@
                         <div class="article-content">
 
                             <span class="article-date">
-                                September 4, 2026
+                                September 5, 2026
                             </span>
 
                             <h3>
-                                <a href="article.html">
-                                    12 Backyard Upgrades That Make Your Home
-                                    Look More Expensive
+                                <a href="articles/gardening-mistakes.html">
+                                    9 Gardening Mistakes That Make Your Backyard
+                                    Harder to Maintain
                                 </a>
                             </h3>
 
                             <p>
-                                These simple backyard improvements can make
-                                a surprisingly big difference without requiring
-                                a complete renovation.
+                                A beautiful garden doesn't need to take over
+                                your weekends. Avoiding these common mistakes
+                                can save time, money and frustration.
                             </p>
 
-                            <a href="article.html" class="read-more">
+                            <a href="articles/gardening-mistakes.html" class="read-more">
                                 Read Article →
                             </a>
 
@@ -542,86 +612,25 @@
                     </article>
 
 
-                    <article class="article-card">
+                    <article class="article-card article-card-soon">
 
-                        <a href="article.html" class="article-image">
+                        <span class="article-card-soon-icon">
+                            🌿
+                        </span>
 
-                            <img
-                                src="assets/images/articles/article-2.jpg"
-                                alt="Trees planted near an American home"
-                            >
+                        <h3>
+                            More Articles Coming Soon
+                        </h3>
 
-                            <span class="article-category">
-                                Trees
-                            </span>
+                        <p>
+                            Ben is working on new gardening, landscaping and
+                            DIY guides. Check back soon or browse the blog
+                            for what's already live.
+                        </p>
 
+                        <a href="blogs.html" class="read-more">
+                            Browse the Blog →
                         </a>
-
-                        <div class="article-content">
-
-                            <span class="article-date">
-                                September 2, 2026
-                            </span>
-
-                            <h3>
-                                <a href="article.html">
-                                    7 Trees You Should Think Twice About
-                                    Planting Near Your House
-                                </a>
-                            </h3>
-
-                            <p>
-                                Some beautiful trees can become expensive
-                                problems when planted in the wrong place.
-                            </p>
-
-                            <a href="article.html" class="read-more">
-                                Read Article →
-                            </a>
-
-                        </div>
-
-                    </article>
-
-
-                    <article class="article-card">
-
-                        <a href="article.html" class="article-image">
-
-                            <img
-                                src="assets/images/articles/article-3.jpg"
-                                alt="Beautiful backyard patio transformation"
-                            >
-
-                            <span class="article-category">
-                                Outdoor Living
-                            </span>
-
-                        </a>
-
-                        <div class="article-content">
-
-                            <span class="article-date">
-                                August 30, 2026
-                            </span>
-
-                            <h3>
-                                <a href="article.html">
-                                    Before & After: Small Backyard
-                                    Transformations You'll Want to Copy
-                                </a>
-                            </h3>
-
-                            <p>
-                                You don't need a huge backyard to create
-                                an outdoor space that feels completely different.
-                            </p>
-
-                            <a href="article.html" class="read-more">
-                                Read Article →
-                            </a>
-
-                        </div>
 
                     </article>
 
@@ -718,8 +727,11 @@
 
                     <a href="index.html" class="footer-logo">
                         <img
-                            src="assets/images/logo.png"
+                            src="assets/images/backyardwithbenprofil.jpg"
                             alt="Backyard with Ben"
+                            width="110"
+                            height="110"
+                            loading="lazy"
                         >
                     </a>
 
@@ -760,6 +772,7 @@
                         <li><a href="index.html">Home</a></li>
                         <li><a href="blogs.html">Blogs</a></li>
                         <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
                     </ul>
 
                 </div>
@@ -774,12 +787,12 @@
                     </h3>
 
                     <ul>
-                        <li><a href="blogs.html">Gardening</a></li>
-                        <li><a href="blogs.html">Lawn Care</a></li>
-                        <li><a href="blogs.html">Landscaping</a></li>
-                        <li><a href="blogs.html">Outdoor Living</a></li>
-                        <li><a href="blogs.html">BBQ & Grilling</a></li>
-                        <li><a href="blogs.html">DIY Projects</a></li>
+                        <li><a href="blogs.html?category=gardening">Gardening</a></li>
+                        <li><a href="blogs.html?category=lawn">Lawn Care</a></li>
+                        <li><a href="blogs.html?category=landscaping">Landscaping</a></li>
+                        <li><a href="blogs.html?category=outdoor-living">Outdoor Living</a></li>
+                        <li><a href="blogs.html?category=bbq">BBQ & Grilling</a></li>
+                        <li><a href="blogs.html?category=diy">DIY Projects</a></li>
                     </ul>
 
                 </div>
@@ -840,6 +853,10 @@
                         Terms of Use
                     </a>
 
+                    <a href="affiliate-disclosure.html">
+                        Affiliate Disclosure
+                    </a>
+
                     <a href="contact.html">
                         Contact
                     </a>
@@ -853,6 +870,8 @@
     </footer>
 
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script src="js/supabase-config.js"></script>
     <script src="js/main.js"></script>
 
 </body>

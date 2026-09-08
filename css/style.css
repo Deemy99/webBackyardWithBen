@@ -53,7 +53,7 @@ html {
 }
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Inter", system-ui, -apple-system, Arial, Helvetica, sans-serif;
     background: var(--white);
     color: var(--text);
     line-height: 1.6;
@@ -844,6 +844,57 @@ button {
 
     font-size: 14px;
     font-weight: 800;
+}
+
+
+/* Compact 2-card layout used while the article catalog is still small */
+
+.articles-grid--pair {
+    grid-template-columns: repeat(2, 1fr);
+
+    max-width: 800px;
+
+    margin: 0 auto;
+}
+
+
+/* "More articles coming soon" filler card */
+
+.article-card-soon {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+    padding: 40px 32px;
+
+    text-align: left;
+
+    background: var(--cream);
+    border-style: dashed;
+}
+
+.article-card-soon-icon {
+    margin-bottom: 14px;
+
+    font-size: 30px;
+}
+
+.article-card-soon h3 {
+    margin-bottom: 12px;
+
+    font-size: 21px;
+
+    color: var(--green-dark);
+}
+
+.article-card-soon p {
+    margin-bottom: 18px;
+
+    color: var(--text-light);
+
+    font-size: 15px;
+    line-height: 1.7;
 }
 
 
@@ -3461,10 +3512,14 @@ button {
     min-width: 0;
 }
 
-.article-ad-sticky {
-    position: sticky;
+/* Non-sticky rail: multiple ad blocks distributed down the
+   column so they appear/disappear as the reader scrolls past
+   different parts of the article, instead of one block pinned
+   to the screen the whole time. */
 
-    top: 125px;
+.article-ad-rail {
+    display: flex;
+    flex-direction: column;
 }
 
 .ad-label {
@@ -3524,6 +3579,213 @@ button {
 }
 
 
+/* Second, stacked sidebar unit under the primary skyscraper/rectangle */
+
+.ad-halfpage {
+    width: 160px;
+
+    height: 300px;
+}
+
+.ad-medium-rect {
+    width: 300px;
+
+    height: 250px;
+}
+
+/* Spacing between distributed blocks — approximates "roughly
+   every couple of sections" without needing JS to sync scroll
+   position across the independent grid columns. */
+
+.article-ad-rail .ad-placeholder + .ad-label {
+    margin-top: 480px;
+}
+
+@media (max-width: 1400px) {
+
+    .article-ad-rail .ad-placeholder + .ad-label {
+        margin-top: 380px;
+    }
+
+}
+
+
+/* =========================================================
+   IN-CONTENT AD (in-flow, visible at every breakpoint —
+   including mobile, where the .article-ad-column sidebar
+   rail is hidden below 950px — sidebar formats are
+   desktop-only, see the 950px media query below)
+========================================================= */
+
+.in-content-ad {
+    width: 100%;
+
+    margin: 40px auto;
+}
+
+.in-content-ad .ad-placeholder {
+    width: 100%;
+    max-width: 336px;
+
+    min-height: 280px;
+
+    margin: 0 auto;
+}
+
+
+/* Video-type in-content placeholder — visually distinct from the
+   static image/display ad boxes above */
+
+.video-ad-placeholder {
+    aspect-ratio: 16 / 9;
+
+    width: 100%;
+    max-width: 560px;
+
+    background: #1c1f1c;
+
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.video-ad-placeholder .video-ad-play {
+    width: 52px;
+    height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.12);
+
+    font-size: 20px;
+
+    color: white;
+}
+
+.video-ad-placeholder span:not(.video-ad-play) {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.video-ad-placeholder small {
+    color: rgba(255, 255, 255, 0.45);
+}
+
+
+/* =========================================================
+   STICKY ANCHOR AD (bottom bar, dismissible)
+
+   A single, non-intrusive anchor unit — the sanctioned
+   alternative to auto-popping interstitials. Stays within
+   Google's "Better Ads" mobile height guidance (well under
+   15% of a typical mobile viewport) and always has a visible
+   close button.
+========================================================= */
+
+.sticky-anchor-ad {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 500;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 12px;
+
+    padding: 6px 40px 6px 14px;
+
+    background: white;
+
+    border-top: 1px solid var(--border);
+
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.sticky-anchor-ad[hidden] {
+    display: none;
+}
+
+.sticky-anchor-ad .ad-label {
+    margin: 0;
+
+    white-space: nowrap;
+}
+
+.sticky-anchor-ad-slot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    max-width: 728px;
+
+    height: 32px;
+
+    border: 1px dashed #d9ddd8;
+    border-radius: 6px;
+
+    background: #fafaf8;
+
+    color: #c0c4c0;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.sticky-anchor-ad-close {
+    position: absolute;
+
+    right: 10px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    width: 22px;
+    height: 22px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #f0f0ec;
+
+    color: var(--text-light);
+
+    font-size: 14px;
+    line-height: 1;
+}
+
+.sticky-anchor-ad-close:hover {
+    background: var(--border);
+
+    color: var(--text);
+}
+
+@media (max-width: 650px) {
+
+    .sticky-anchor-ad {
+        padding: 5px 38px 5px 10px;
+    }
+
+    .sticky-anchor-ad .ad-label {
+        display: none;
+    }
+
+    .sticky-anchor-ad-slot {
+        height: 28px;
+
+        font-size: 10px;
+    }
+
+}
+
+
 /* =========================================================
    ARTICLE CONTENT
 ========================================================= */
@@ -3559,6 +3821,60 @@ button {
 
 
 /* =========================================================
+   ARTICLE TAKEAWAYS (TL;DR box)
+========================================================= */
+
+.article-takeaways {
+    margin: 32px 0 40px;
+
+    padding: 30px 32px;
+
+    border-radius: 18px;
+
+    background: var(--green-soft);
+}
+
+.article-takeaways h2 {
+    margin-bottom: 16px;
+
+    font-size: 18px;
+
+    letter-spacing: 0.3px;
+
+    color: var(--green-dark);
+}
+
+.article-takeaways ul {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+}
+
+.article-takeaways li {
+    position: relative;
+
+    padding-left: 26px;
+
+    font-size: 15px;
+    line-height: 1.6;
+
+    color: #2c3a2e;
+}
+
+.article-takeaways li::before {
+    content: "✓";
+
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    color: var(--green);
+
+    font-weight: 800;
+}
+
+
+/* =========================================================
    ARTICLE SECTIONS
 ========================================================= */
 
@@ -3589,6 +3905,8 @@ button {
     color: var(--green-dark);
 
     font-family:
+        "Inter",
+        system-ui,
         Arial,
         Helvetica,
         sans-serif;
@@ -3639,6 +3957,41 @@ button {
     font-size: 15px;
 
     line-height: 1.7;
+}
+
+
+/* =========================================================
+   AFFILIATE DISCLOSURE NOTE (in-article)
+========================================================= */
+
+.affiliate-disclosure-note {
+    margin: 28px 0 35px;
+
+    padding: 14px 20px;
+
+    border-left: 4px solid var(--green);
+
+    border-radius: 0 12px 12px 0;
+
+    background: var(--cream);
+
+    color: var(--text);
+
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.affiliate-disclosure-note strong {
+    color: var(--green-dark);
+}
+
+.affiliate-disclosure-note a {
+    color: var(--green);
+
+    font-weight: 700;
+
+    text-decoration: underline;
+    text-underline-offset: 2px;
 }
 
 
@@ -3788,6 +4141,52 @@ button {
 
 
 /* =========================================================
+   ARTICLE FAQ
+========================================================= */
+
+.article-faq {
+    margin-top: 55px;
+
+    padding-top: 45px;
+
+    border-top: 1px solid var(--border);
+}
+
+.article-faq h2 {
+    margin-bottom: 26px;
+
+    font-size: 28px;
+
+    color: var(--green-dark);
+}
+
+.article-faq-item {
+    padding: 20px 0;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.article-faq-item:first-of-type {
+    padding-top: 0;
+}
+
+.article-faq-item h3 {
+    margin-bottom: 8px;
+
+    font-size: 16px;
+
+    color: var(--green-dark);
+}
+
+.article-faq-item p {
+    color: #546057;
+
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+
+/* =========================================================
    TAGS
 ========================================================= */
 
@@ -3877,6 +4276,12 @@ button {
         grid-template-columns: 1fr;
     }
 
+    /* Sidebar skyscraper/rectangle formats are desktop-only —
+       they aren't real IAB mobile ad sizes and sidebar stacks
+       fare worse under Google's Better Ads density audit than
+       in-content units. Mobile ad presence comes from the
+       .in-content-ad slots + the sticky anchor bar instead. */
+
     .article-ad-column {
         display: none;
     }
@@ -3963,6 +4368,429 @@ button {
         width: 100%;
 
         border-radius: 10px;
+    }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE FOLLOW-UP FIXES
+========================================================= */
+
+/* Slider dots: larger touch target without a bigger visual dot */
+
+.slider-dot {
+    padding: 7px;
+    background-clip: content-box;
+
+    width: 9px;
+    height: 9px;
+}
+
+.slider-dot.active {
+    width: 28px;
+}
+
+
+/* Blog search: fluid instead of a hard-coded width so it never
+   overflows narrow desktop/laptop windows before the 1100px
+   stacked layout kicks in */
+
+.blog-search {
+    width: 100%;
+    max-width: 285px;
+    min-width: 200px;
+}
+
+@media (max-width: 1100px) {
+
+    .blog-search {
+        max-width: none;
+    }
+
+}
+
+
+/* About philosophy card / article layout: fill the awkward gap
+   between the desktop grid and the stacked mobile layout */
+
+@media (max-width: 1300px) and (min-width: 1101px) {
+
+    .about-philosophy-card {
+        grid-template-columns: 1fr;
+
+        gap: 45px;
+    }
+
+}
+
+@media (max-width: 1100px) and (min-width: 851px) {
+
+    .about-philosophy-card {
+        padding: 50px;
+    }
+
+}
+
+
+/* =========================================================
+   LEGAL PAGES (Privacy Policy, Terms of Use)
+========================================================= */
+
+.legal-page {
+    padding: 70px 0 110px;
+
+    background: white;
+}
+
+.legal-content {
+    width: min(92%, 780px);
+
+    margin: 0 auto;
+}
+
+.legal-updated {
+    display: inline-block;
+
+    margin-top: 8px;
+
+    color: var(--text-light);
+
+    font-size: 13px;
+}
+
+.legal-notice {
+    margin-bottom: 44px;
+    padding: 22px 26px;
+
+    background: var(--cream);
+    border-left: 4px solid var(--green);
+    border-radius: 12px;
+
+    color: var(--text);
+
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.legal-notice strong {
+    color: var(--green-dark);
+}
+
+.legal-content h2 {
+    margin: 44px 0 16px;
+
+    font-size: 25px;
+
+    letter-spacing: -0.4px;
+
+    color: var(--green-dark);
+}
+
+.legal-content h2:first-of-type {
+    margin-top: 0;
+}
+
+.legal-content p {
+    margin-bottom: 18px;
+
+    font-size: 16px;
+    line-height: 1.85;
+
+    color: #3c423d;
+}
+
+.legal-content ul {
+    margin: 0 0 20px 4px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.legal-content li {
+    position: relative;
+
+    padding-left: 22px;
+
+    font-size: 16px;
+    line-height: 1.8;
+
+    color: #3c423d;
+}
+
+.legal-content li::before {
+    content: "";
+
+    position: absolute;
+    left: 0;
+    top: 10px;
+
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: var(--green);
+}
+
+.legal-content a {
+    color: var(--green);
+
+    font-weight: 700;
+
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+
+/* =========================================================
+   CONTACT PAGE
+========================================================= */
+
+.contact-section {
+    padding: 90px 0 110px;
+
+    background: white;
+}
+
+.contact-grid {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+
+    gap: 60px;
+
+    align-items: start;
+}
+
+.contact-info h2 {
+    margin-bottom: 16px;
+
+    font-size: clamp(30px, 3vw, 38px);
+
+    letter-spacing: -0.8px;
+
+    color: var(--green-dark);
+}
+
+.contact-info > p {
+    margin-bottom: 10px;
+
+    color: var(--text-light);
+
+    font-size: 16px;
+    line-height: 1.8;
+}
+
+.contact-methods {
+    margin-top: 30px;
+}
+
+.contact-method {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 16px;
+
+    padding: 20px 0;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.contact-method:first-child {
+    padding-top: 0;
+}
+
+.contact-method:last-child {
+    border-bottom: none;
+}
+
+.contact-method-icon {
+    flex-shrink: 0;
+
+    width: 44px;
+    height: 44px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: var(--green-soft);
+    color: var(--green-dark);
+
+    font-size: 18px;
+}
+
+.contact-method h3 {
+    margin-bottom: 4px;
+
+    font-size: 15px;
+
+    color: var(--green-dark);
+}
+
+.contact-method p,
+.contact-method a {
+    color: var(--text-light);
+
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.contact-method a:hover {
+    color: var(--green);
+}
+
+
+/* Form */
+
+.contact-form-card {
+    padding: 42px;
+
+    border-radius: 26px;
+
+    background: #f8f8f5;
+    border: 1px solid var(--border);
+}
+
+.contact-form .form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    margin-bottom: 22px;
+}
+
+.contact-form-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    gap: 22px;
+}
+
+.contact-form label {
+    font-size: 13px;
+    font-weight: 700;
+
+    color: var(--green-dark);
+}
+
+.contact-form input,
+.contact-form textarea {
+    padding: 14px 16px;
+
+    border: 1px solid var(--border);
+    border-radius: 12px;
+
+    background: white;
+
+    font-family: inherit;
+    font-size: 15px;
+
+    color: var(--text);
+
+    outline: none;
+
+    transition:
+        border var(--transition),
+        box-shadow var(--transition);
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+    border-color: #a6baa7;
+
+    box-shadow: 0 0 0 4px rgba(36, 92, 61, 0.07);
+}
+
+.contact-form textarea {
+    min-height: 150px;
+
+    resize: vertical;
+}
+
+.contact-form button[type="submit"] {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+
+    padding: 15px 26px;
+
+    border-radius: 50px;
+
+    background: var(--green-dark);
+    color: white;
+
+    font-size: 14px;
+    font-weight: 800;
+
+    transition:
+        background var(--transition),
+        transform var(--transition);
+}
+
+.contact-form button[type="submit"]:hover {
+    background: var(--green);
+
+    transform: translateY(-2px);
+}
+
+.contact-form button[type="submit"]:disabled {
+    opacity: 0.7;
+
+    cursor: default;
+
+    transform: none;
+}
+
+.contact-form-message {
+    display: none;
+
+    margin-top: 16px;
+    padding: 12px 16px;
+
+    border-radius: 10px;
+
+    font-size: 14px;
+}
+
+.contact-form-message.show {
+    display: block;
+}
+
+.contact-form-message.success {
+    background: #e4f0e3;
+    color: var(--green-dark);
+}
+
+.contact-form-message.error {
+    background: #fbe6e6;
+    color: #a23a3a;
+}
+
+
+@media (max-width: 950px) {
+
+    .contact-grid {
+        grid-template-columns: 1fr;
+
+        gap: 45px;
+    }
+
+}
+
+@media (max-width: 650px) {
+
+    .contact-form-cols {
+        grid-template-columns: 1fr;
+
+        gap: 0;
+    }
+
+    .contact-form-card {
+        padding: 28px 22px;
     }
 
 }

@@ -11,8 +11,37 @@
         content="Learn more about Backyard with Ben, a backyard and outdoor living blog sharing practical ideas for gardening, lawn care, landscaping, patios, BBQ, DIY projects and more."
     >
 
-    <link rel="icon" href="assets/images/logo.png">
+    <link rel="canonical" href="https://www.backyardwithben.com/about.html">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Backyard with Ben">
+    <meta property="og:title" content="About Us | Backyard with Ben">
+    <meta property="og:description" content="Learn more about Backyard with Ben, a backyard and outdoor living blog sharing practical ideas for gardening, lawn care, landscaping, patios, BBQ and DIY projects.">
+    <meta property="og:url" content="https://www.backyardwithben.com/about.html">
+    <meta property="og:image" content="https://www.backyardwithben.com/assets/images/og-image.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="About Us | Backyard with Ben">
+    <meta name="twitter:description" content="Learn more about Backyard with Ben, a backyard and outdoor living blog sharing practical ideas for gardening, lawn care, landscaping, patios, BBQ and DIY projects.">
+    <meta name="twitter:image" content="https://www.backyardwithben.com/assets/images/og-image.jpg">
+
+    <link rel="icon" href="assets/images/backyardwithbenprofil.jpg">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="css/style.css">
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Backyard with Ben",
+        "url": "https://www.backyardwithben.com/",
+        "logo": "https://www.backyardwithben.com/assets/images/backyardwithbenprofil.jpg",
+        "sameAs": []
+    }
+    </script>
 </head>
 
 <body>
@@ -32,8 +61,10 @@
                 aria-label="Backyard with Ben Home"
             >
                 <img
-                    src="assets/images/backyardwithbenprofil.png"
+                    src="assets/images/backyardwithbenprofil.jpg"
                     alt="Backyard with Ben"
+                    width="78"
+                    height="78"
                 >
             </a>
 
@@ -64,6 +95,12 @@
                             class="active"
                         >
                             About Us
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="contact.html">
+                            Contact
                         </a>
                     </li>
 
@@ -160,6 +197,9 @@
                         <img
                             src="assets/images/about/about-backyard.jpg"
                             alt="Beautiful American backyard with patio, lawn and garden"
+                            width="1672"
+                            height="941"
+                            loading="lazy"
                         >
 
                         <div class="about-image-badge">
@@ -550,7 +590,7 @@
 
 
                     <a
-                        href="blog.html"
+                        href="blogs.html"
                         class="about-blog-button"
                     >
                         Explore the Blog
@@ -672,8 +712,11 @@
                         class="footer-logo"
                     >
                         <img
-                            src="assets/images/logo.png"
+                            src="assets/images/backyardwithbenprofil.jpg"
                             alt="Backyard with Ben"
+                            width="110"
+                            height="110"
+                            loading="lazy"
                         >
                     </a>
 
@@ -729,7 +772,7 @@
                         </li>
 
                         <li>
-                            <a href="blog.html">
+                            <a href="blogs.html">
                                 Blogs
                             </a>
                         </li>
@@ -737,6 +780,12 @@
                         <li>
                             <a href="about.html">
                                 About Us
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="contact.html">
+                                Contact
                             </a>
                         </li>
 
@@ -757,37 +806,37 @@
                     <ul>
 
                         <li>
-                            <a href="blog.html">
+                            <a href="blogs.html?category=gardening">
                                 Gardening
                             </a>
                         </li>
 
                         <li>
-                            <a href="blog.html">
+                            <a href="blogs.html?category=lawn">
                                 Lawn Care
                             </a>
                         </li>
 
                         <li>
-                            <a href="blog.html">
+                            <a href="blogs.html?category=landscaping">
                                 Landscaping
                             </a>
                         </li>
 
                         <li>
-                            <a href="blog.html">
+                            <a href="blogs.html?category=outdoor-living">
                                 Outdoor Living
                             </a>
                         </li>
 
                         <li>
-                            <a href="blog.html">
+                            <a href="blogs.html?category=bbq">
                                 BBQ & Grilling
                             </a>
                         </li>
 
                         <li>
-                            <a href="blog.html">
+                            <a href="blogs.html?category=diy">
                                 DIY Projects
                             </a>
                         </li>
@@ -858,6 +907,10 @@
                         Terms of Use
                     </a>
 
+                    <a href="affiliate-disclosure.html">
+                        Affiliate Disclosure
+                    </a>
+
                     <a href="contact.html">
                         Contact
                     </a>
@@ -871,6 +924,8 @@
     </footer>
 
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script src="js/supabase-config.js"></script>
     <script src="js/main.js"></script>
 
 </body>
