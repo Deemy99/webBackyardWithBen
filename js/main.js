@@ -735,51 +735,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =====================================================
-       STICKY ANCHOR AD (dismissible bottom bar)
-    ====================================================== */
-
-    const stickyAnchorAd =
-        document.querySelector("#sticky-anchor-ad");
-
-    if (stickyAnchorAd) {
-
-        const closeButton =
-            stickyAnchorAd.querySelector("#sticky-anchor-ad-close");
-
-        let alreadyDismissed = false;
-
-        try {
-            alreadyDismissed =
-                sessionStorage.getItem("stickyAdDismissed") === "true";
-        } catch (error) {
-            alreadyDismissed = false;
-        }
-
-        if (alreadyDismissed) {
-            stickyAnchorAd.hidden = true;
-        }
-
-        if (closeButton) {
-
-            closeButton.addEventListener("click", () => {
-
-                stickyAnchorAd.hidden = true;
-
-                try {
-                    sessionStorage.setItem("stickyAdDismissed", "true");
-                } catch (error) {
-                    /* sessionStorage unavailable (private mode, etc.) — ignore */
-                }
-
-            });
-
-        }
-
-    }
-
-
-
-    /* =====================================================
        MOBILE MENU
     ====================================================== */
 

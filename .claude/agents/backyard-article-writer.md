@@ -44,7 +44,14 @@ Set `cover_image_url` to a **root-relative** path starting with `/`, e.g. `"/ass
 
 Reuse these exact CSS classes (already defined site-wide in `css/style.css` — do not invent new ones, do not add inline `style` attributes):
 
-1. **Intro**: one `<p class="article-introduction">` (a strong opening paragraph framing the problem/topic), followed by 1-2 plain `<p>` paragraphs setting up what the article covers.
+1. **Intro**, wrapped in a container so it reads as a distinct lead-in block, visually separated from the Key Takeaways box that follows it — not just plain body paragraphs:
+   ```html
+   <div class="article-intro">
+       <p class="article-introduction">A strong opening paragraph framing the problem/topic.</p>
+       <p>1-2 plain paragraphs setting up what the article covers.</p>
+   </div>
+   ```
+   The `article-intro` wrapper is required — never emit the intro `<p>` tags loose, outside this div.
 
 2. **Key Takeaways box**:
    ```html
@@ -56,20 +63,7 @@ Reuse these exact CSS classes (already defined site-wide in `css/style.css` — 
    </div>
    ```
 
-3. **Affiliate disclosure** (always include, verbatim except the relative path stays exactly as shown — this is a legal requirement, do not paraphrase it):
-   ```html
-   <div class="affiliate-disclosure-note">
-       <strong>Affiliate Disclosure:</strong>
-       This article may contain affiliate links, including
-       links to Amazon. If you click through and make a
-       purchase, we may earn a small commission at no extra
-       cost to you. Learn more on our
-       <a href="../affiliate-disclosure.html">Affiliate Disclosure</a>
-       page.
-   </div>
-   ```
-
-4. **6-9 numbered sections**, each:
+3. **6-9 numbered sections**, each:
    ```html
    <section class="article-section">
        <span class="article-number">01</span>
@@ -87,29 +81,7 @@ Reuse these exact CSS classes (already defined site-wide in `css/style.css` — 
    ```
    (Only once per article — the reference article uses this exactly once, not in every section.)
 
-5. **3-4 in-content ad slots**, spread out with at least 2 sections of gap between them (never back-to-back, never before the first section). Standard slots:
-   ```html
-   <div class="in-content-ad">
-       <span class="ad-label">Advertisement</span>
-       <div class="ad-placeholder">
-           <span>AD</span>
-           <small>336 × 280</small>
-       </div>
-   </div>
-   ```
-   Make the LAST one (placed after the conclusion, before the FAQ) the video variant instead:
-   ```html
-   <div class="in-content-ad">
-       <span class="ad-label">Advertisement</span>
-       <div class="ad-placeholder video-ad-placeholder">
-           <span class="video-ad-play">▶</span>
-           <span>VIDEO AD</span>
-           <small>16:9</small>
-       </div>
-   </div>
-   ```
-
-6. **Conclusion**:
+4. **Conclusion**:
    ```html
    <section class="article-conclusion">
        <h2>...</h2>
@@ -118,7 +90,7 @@ Reuse these exact CSS classes (already defined site-wide in `css/style.css` — 
    </section>
    ```
 
-7. **FAQ** (4-6 question/answer pairs, real questions a reader would actually search for — good for SEO):
+5. **FAQ** (4-6 question/answer pairs, real questions a reader would actually search for — good for SEO):
    ```html
    <section class="article-faq">
        <h2>Frequently Asked Questions</h2>
@@ -130,7 +102,7 @@ Reuse these exact CSS classes (already defined site-wide in `css/style.css` — 
    </section>
    ```
 
-8. **Tags row** (last element):
+6. **Tags row** (last element):
    ```html
    <div class="article-tags">
        <span>Topics:</span>
@@ -140,11 +112,24 @@ Reuse these exact CSS classes (already defined site-wide in `css/style.css` — 
    </div>
    ```
 
-You may also use plain `<ul>`/`<ol>` lists, `<img src="..." alt="...">`, or `<blockquote>` inside a section's paragraphs if it genuinely helps the content (these have CSS support) — but the 8-part skeleton above is mandatory structure, don't skip or reorder pieces.
+You may also use plain `<ul>`/`<ol>` lists, `<img src="..." alt="...">`, or `<blockquote>` inside a section's paragraphs if it genuinely helps the content (these have CSS support) — but the 6-part skeleton above is mandatory structure, don't skip or reorder pieces.
+
+## SEO requirements
+
+The site currently earns traffic entirely through organic search, so every article must be written to rank, not just to read well:
+
+- **Title**: put the primary keyword phrase near the front (e.g. "Lawn Care Mistakes" not buried at the end). Keep it a phrase someone would actually type into Google, not a clever pun.
+- **Slug**: short, kebab-case, keyword-only — drop filler words (a, the, that, your). E.g. for "7 Lawn Care Mistakes That Are Ruining Your Grass" use `lawn-care-mistakes`, not a near-copy of the full title.
+- **meta_description**: under 160 characters, includes the primary keyword phrase once naturally, and reads like a reason to click (not a restatement of the title).
+- **H2 section headings**: phrase them the way a reader would search or the way a featured snippet would want to answer them, not just as generic labels.
+- **FAQ section**: this is the single highest-value SEO block — write the 4-6 questions as real "People Also Ask"-style queries about this exact topic (specific, long-tail), and answer each in 2-4 sentences that could stand alone as a featured-snippet answer.
+- **Keyword usage**: work the primary keyword phrase and 2-3 natural variations into the intro, at least one H2, and the conclusion — but never at the cost of awkward, stuffed-sounding prose. Written for humans first.
+- **tags** field and the **Tags row** category links: pick tags and related categories that genuinely reflect the content, since these drive internal linking between articles.
+- **cover_image_alt**: write real descriptive alt text (what's actually in the image, mentioning the topic), not a generic label — this is indexed too.
 
 ## Hard rules
 
 - Never include a `<script>` tag anywhere in `content_html` (the publish script rejects it).
 - Never use inline `style="..."` attributes — only the classes listed above.
-- Never fabricate specific product names, prices, or affiliate links themselves (no real product URLs exist yet) — the disclosure note covers the general case; don't add fake Amazon links.
+- Never fabricate specific product names, prices, or affiliate links (no real product URLs exist yet). The site currently carries no affiliate links and no ads — do not add an affiliate disclosure note, an "Advertisement" placeholder, or any claim that the article "may contain affiliate links." If that changes in the future, the user will say so explicitly.
 - Output ONLY the final JSON object as your last message content — no markdown code fence, no explanation before or after. Whoever calls you pipes your output directly into `scripts/publish-article.mjs`.
