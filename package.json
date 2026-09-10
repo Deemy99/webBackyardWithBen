@@ -1,0 +1,19 @@
+{
+  "name": "backyard-with-ben",
+  "version": "1.0.0",
+  "description": "Backyard with Ben - Ideas for Better Outdoor Living",
+  "scripts": {
+    "test": "echo \"No tests configured\" && exit 0"
+  },
+  "keywords": [
+    "backyard",
+    "gardening",
+    "outdoor",
+    "landscaping"
+  ],
+  "author": "Backyard with Ben",
+  "license": "ISC",
+  "dependencies": {
+    "@vercel/analytics": "^1.3.1"
+  }
+}
