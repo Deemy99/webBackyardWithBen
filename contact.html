@@ -193,8 +193,8 @@
                                 <div>
                                     <h3>Email</h3>
                                     <p>
-                                        <a href="mailto:hello@backyardwithben.com">
-                                            hello@backyardwithben.com
+                                        <a href="mailto:ben@backyardwithben.com">
+                                            ben@backyardwithben.com
                                         </a>
                                     </p>
                                 </div>
@@ -253,7 +253,7 @@
                         <form
                             id="contact-form"
                             class="contact-form"
-                            action="https://formspree.io/f/YOUR_FORM_ID"
+                            action="/api/contact"
                             method="POST"
                         >
 
@@ -374,6 +374,13 @@
 
                         </div>
 
+                    <div class="newsletter-consent-row">
+                        <input type="checkbox" id="newsletter-consent" required>
+                        <label for="newsletter-consent">
+                            I agree to receive marketing emails from Backyard with Ben and can unsubscribe anytime.
+                        </label>
+                    </div>
+
                         <small>
                             Free backyard inspiration. No spam. Unsubscribe anytime.
                         </small>
@@ -484,6 +491,8 @@
                             Email address
                         </label>
 
+                        <div class="footer-newsletter-input-row">
+
                         <input
                             type="email"
                             id="footer-email"
@@ -494,6 +503,15 @@
                         <button type="submit">
                             Subscribe
                         </button>
+
+                    </div>
+
+                    <div class="newsletter-consent-row">
+                        <input type="checkbox" id="footer-consent" required>
+                        <label for="footer-consent">
+                            I agree to receive marketing emails from Backyard with Ben and can unsubscribe anytime.
+                        </label>
+                    </div>
 
                     </form>
 

@@ -1058,6 +1058,34 @@ button {
     font-size: 12px;
 }
 
+.newsletter-consent-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+
+    max-width: 700px;
+
+    margin-top: 13px;
+    margin-left: 10px;
+}
+
+.newsletter-consent-row input[type="checkbox"] {
+    flex-shrink: 0;
+
+    width: 15px;
+    height: 15px;
+    margin-top: 3px;
+
+    accent-color: var(--green-dark);
+}
+
+.newsletter-consent-row label {
+    color: rgba(255, 255, 255, 0.75);
+
+    font-size: 12.5px;
+    line-height: 1.5;
+}
+
 
 /* =========================================================
    FOOTER
@@ -1187,6 +1215,13 @@ button {
 
 .footer-newsletter-form {
     display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+.footer-newsletter-input-row {
+    display: flex;
 
     padding: 5px;
 
@@ -1195,7 +1230,7 @@ button {
     border-radius: 50px;
 }
 
-.footer-newsletter-form input {
+.footer-newsletter-input-row input {
     flex: 1;
 
     min-width: 0;
@@ -1210,7 +1245,7 @@ button {
     font-size: 13px;
 }
 
-.footer-newsletter-form button {
+.footer-newsletter-input-row button {
     padding: 11px 16px;
 
     border-radius: 50px;
@@ -1224,8 +1259,19 @@ button {
     transition: background var(--transition);
 }
 
-.footer-newsletter-form button:hover {
+.footer-newsletter-input-row button:hover {
     background: var(--green-dark);
+}
+
+.footer-newsletter-form .newsletter-consent-row {
+    margin-top: 0;
+    margin-left: 6px;
+}
+
+.footer-newsletter-form .newsletter-consent-row label {
+    color: rgba(255, 255, 255, 0.62);
+
+    font-size: 12px;
 }
 
 

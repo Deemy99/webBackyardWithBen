@@ -494,6 +494,9 @@ document.addEventListener("DOMContentLoaded", () => {
             const submitButton =
                 form.querySelector('button[type="submit"]');
 
+            const consentInput =
+                form.querySelector('.newsletter-consent-row input[type="checkbox"]');
+
 
             if (!emailInput || !submitButton) {
                 return;
@@ -517,6 +520,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
             emailInput.style.outline = "none";
+
+
+            if (consentInput && !consentInput.checked) {
+
+                consentInput.focus();
+
+                return;
+
+            }
 
 
             const originalButtonHTML =
@@ -572,6 +584,18 @@ document.addEventListener("DOMContentLoaded", () => {
                         submitButton.innerHTML = "You're In! ✓";
                         emailInput.value = "";
 
+                        /* Fire-and-forget: the signup itself is
+                           already durably stored above, so a slow
+                           or failed welcome email must not affect
+                           the success state shown to the user. */
+                        fetch("/api/send-welcome-email", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({ email })
+                        }).catch(() => {});
+
                     } else if (error.code === "23505") {
 
                         submitButton.innerHTML = "Already Subscribed ✓";
@@ -626,9 +650,11 @@ document.addEventListener("DOMContentLoaded", () => {
     /* =====================================================
        CONTACT FORM
 
-       Submits to Formspree (see contact.html form action)
-       via fetch so we can show an inline success/error
-       state instead of a full page redirect.
+       Submits to our own /api/contact serverless function
+       (see contact.html form action), which forwards the
+       message to Ben via Resend. Sent as urlencoded rather
+       than multipart so the function can read req.body
+       without a multipart-parsing dependency.
     ====================================================== */
 
     const contactForm =
@@ -672,11 +698,15 @@ document.addEventListener("DOMContentLoaded", () => {
             submitButton.innerHTML = "Sending...";
             submitButton.disabled = true;
 
+            const formParams =
+                new URLSearchParams(new FormData(contactForm));
+
             fetch(contactForm.action, {
                 method: "POST",
-                body: new FormData(contactForm),
+                body: formParams,
                 headers: {
-                    Accept: "application/json"
+                    Accept: "application/json",
+                    "Content-Type": "application/x-www-form-urlencoded"
                 }
             })
                 .then((response) => {
