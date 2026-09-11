@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- TODO: replace https://www.backyardwithben.com/ placeholder domain with the real production domain before launch. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
     <url>
@@ -48,6 +47,98 @@
         <loc>https://www.backyardwithben.com/affiliate-disclosure.html</loc>
         <changefreq>yearly</changefreq>
         <priority>0.2</priority>
+    </url>
+
+
+    <url>
+        <loc>https://www.backyardwithben.com/articles/view.html?slug=easy-diy-backyard-upgrades-weekend</loc>
+        <lastmod>2026-09-10</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <url>
+        <loc>https://www.backyardwithben.com/articles/view.html?slug=weekend-backyard-projects-expensive</loc>
+        <lastmod>2026-09-10</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <url>
+        <loc>https://www.backyardwithben.com/articles/view.html?slug=grilling-mistakes-ruin-food</loc>
+        <lastmod>2026-09-10</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <url>
+        <loc>https://www.backyardwithben.com/articles/view.html?slug=backyard-upgrades-vacation-feel</loc>
+        <lastmod>2026-09-10</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <url>
+        <loc>https://www.backyardwithben.com/articles/view.html?slug=landscaping-mistakes-before-redo-yard</loc>
+        <lastmod>2026-09-10</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <url>
+        <loc>https://www.backyardwithben.com/articles/view.html?slug=landscaping-ideas-look-expensive</loc>
+        <lastmod>2026-09-10</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <url>
+        <loc>https://www.backyardwithben.com/articles/view.html?slug=why-lawn-looks-tired-fix</loc>
+        <lastmod>2026-09-10</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <url>
+        <loc>https://www.backyardwithben.com/articles/view.html?slug=best-low-maintenance-plants-backyard</loc>
+        <lastmod>2026-09-10</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <url>
+        <loc>https://www.backyardwithben.com/articles/view.html?slug=trees-transform-backyard</loc>
+        <lastmod>2026-09-10</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <url>
+        <loc>https://www.backyardwithben.com/articles/view.html?slug=gardening-mistakes-time-money-blooms</loc>
+        <lastmod>2026-09-10</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <url>
+        <loc>https://www.backyardwithben.com/articles/view.html?slug=patio-look-more-expensive</loc>
+        <lastmod>2026-09-10</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <url>
+        <loc>https://www.backyardwithben.com/articles/view.html?slug=lawn-care-mistakes</loc>
+        <lastmod>2026-09-10</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <url>
+        <loc>https://www.backyardwithben.com/articles/view.html?slug=grilling-tips</loc>
+        <lastmod>2026-09-10</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
     </url>
 
 </urlset>
