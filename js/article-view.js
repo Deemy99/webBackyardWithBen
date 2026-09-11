@@ -35,6 +35,17 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
+    /* Set canonical/og:url synchronously from the URL's own slug,
+       before the Supabase fetch resolves — so a renderer that reads
+       these before the async data arrives still sees the correct
+       per-article URL instead of the slug-less placeholder. */
+    const earlyPageUrl =
+        "https://www.backyardwithben.com/articles/view.html?slug=" +
+        encodeURIComponent(slug);
+
+    setMeta("#page-canonical", earlyPageUrl);
+    setMeta("#og-url", earlyPageUrl);
+
 
     const categoryLabels = {
         gardening: "Gardening",
