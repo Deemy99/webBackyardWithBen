@@ -359,6 +359,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 heroImg.alt = data.cover_image_alt || data.title;
             }
 
+            const shareFacebookLink = document.querySelector("#article-share-facebook");
+
+            if (shareFacebookLink) {
+                shareFacebookLink.href =
+                    "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(pageUrl);
+            }
+
             if (bodyEl) {
 
                 const rawHtml = data.content_html || "";
