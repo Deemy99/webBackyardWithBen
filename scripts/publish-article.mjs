@@ -20,9 +20,13 @@
      node scripts/publish-article.mjs --file /path/outside/repo/article.json
 ========================================================= */
 
-import { readFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
-import { join } from "node:path";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const SITEMAP_PATH = join(dirname(fileURLToPath(import.meta.url)), "..", "sitemap.xml");
+const ARTICLE_URL_MARKER = "<loc>https://www.backyardwithben.com/articles/view.html";
 
 const VALID_CATEGORIES = [
     "gardening",
@@ -155,6 +159,59 @@ function validateArticle(article) {
 }
 
 
+/* Rebuilds the article <url> entries in sitemap.xml from every published
+   row in Supabase. Static pages (everything before the first article
+   entry) are kept as-is. Does not commit or push. */
+async function updateSitemap(secrets) {
+
+    const response = await fetch(
+        secrets.SUPABASE_URL +
+            "/rest/v1/articles?select=slug,updated_at&published=eq.true&order=published_at.desc&limit=10000",
+        {
+            headers: {
+                apikey: secrets.SUPABASE_SERVICE_ROLE_KEY,
+                Authorization: "Bearer " + secrets.SUPABASE_SERVICE_ROLE_KEY
+            }
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error("Could not list articles (HTTP " + response.status + ")");
+    }
+
+    const articles = await response.json();
+
+    const current = readFileSync(SITEMAP_PATH, "utf-8");
+    const markerIndex = current.indexOf(ARTICLE_URL_MARKER);
+    const headEnd = markerIndex === -1
+        ? current.lastIndexOf("</urlset>")
+        : current.lastIndexOf("<url>", markerIndex);
+
+    if (headEnd === -1) {
+        throw new Error("sitemap.xml has an unexpected structure");
+    }
+
+    let out = current.slice(0, headEnd).replace(/\s+$/, "") + "\n\n";
+
+    articles.forEach((a) => {
+        out +=
+            "    <url>\n" +
+            `        ${ARTICLE_URL_MARKER}?slug=${a.slug}</loc>\n` +
+            `        <lastmod>${a.updated_at.slice(0, 10)}</lastmod>\n` +
+            "        <changefreq>monthly</changefreq>\n" +
+            "        <priority>0.7</priority>\n" +
+            "    </url>\n\n";
+    });
+
+    out += "</urlset>\n";
+
+    writeFileSync(SITEMAP_PATH, out);
+
+    return articles.length;
+
+}
+
+
 async function main() {
 
     const fileFlagIndex = process.argv.indexOf("--file");
@@ -242,6 +299,17 @@ async function main() {
         published_at: inserted.published_at,
         url: `https://www.backyardwithben.com/articles/view.html?slug=${inserted.slug}`
     }, null, 2));
+
+    if (inserted.published) {
+
+        try {
+            const count = await updateSitemap(secrets);
+            console.error(`sitemap.xml updated (${count} articles) — review, commit and push it.`);
+        } catch (error) {
+            console.error("WARNING: article was published, but sitemap update failed: " + error.message);
+        }
+
+    }
 
 }
 

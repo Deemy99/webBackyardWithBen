@@ -54,3 +54,10 @@ slug and retry.
 - Never install `@supabase/supabase-js` or any dependency — uses
   Node's built-in `fetch` only.
 - Never silently overwrite an existing article on a slug collision.
+
+## Sitemap
+
+When a published article is inserted, the script also rebuilds the
+article entries in `sitemap.xml` from all published rows in Supabase.
+It only edits the file — review, commit and push it yourself. A
+sitemap failure prints a warning but does not undo the insert.
