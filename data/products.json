@@ -1,0 +1,563 @@
+{
+  "_meta": {
+    "note": "Verified on amazon.com (US delivery) on 2026-10-10. Ratings and review counts change over time; refresh them occasionally. Tracking ID: backyardwithb-20.",
+    "imageSourceValues": [
+      "icon",
+      "amazon-api"
+    ]
+  },
+  "collections": {
+    "starterKit": [
+      "avid-power-20v-drill",
+      "black-decker-orbital-sander",
+      "stanley-claw-hammer",
+      "irwin-quick-grip-mini-4pk"
+    ],
+    "homeEssentials": [
+      "dewalt-drill-impact-combo",
+      "dewalt-circular-saw",
+      "kreg-r3-pocket-hole-jig",
+      "dewalt-dwe6421-sander",
+      "swanson-speed-square",
+      "nocry-safety-glasses"
+    ],
+    "shopTeaser": [
+      "fox-fern-planter-12-black",
+      "vego-raised-bed-9in1",
+      "brightech-solar-string-27ft",
+      "sunnydaze-crossweave-36",
+      "polywood-adirondack-black",
+      "bursvik-wind-chimes-37"
+    ]
+  },
+  "products": [
+    {
+      "id": "dewalt-drill-impact-combo",
+      "asin": "B00IJ0ALYS",
+      "name": "DEWALT 20V MAX Drill + Impact Driver Combo Kit (DCK240C2)",
+      "section": "tools",
+      "category": "power-tools",
+      "badge": "Top pick",
+      "whyWePickIt": "4.7★ from 61,000+ reviews. Drill and impact driver in one kit with 2 batteries, charger and bag. It covers almost every backyard build.",
+      "url": "https://www.amazon.com/dp/B00IJ0ALYS?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "dewalt-circular-saw",
+      "asin": "B007NVSTO8",
+      "name": "DEWALT 20V MAX Cordless Circular Saw (DCS391B, tool only)",
+      "section": "tools",
+      "category": "power-tools",
+      "badge": "Top pick",
+      "whyWePickIt": "4.6★ from 11,000+ reviews. Uses the same 20V MAX batteries as the DEWALT drill kits. Straight cuts for raised beds, fences and decking.",
+      "url": "https://www.amazon.com/dp/B007NVSTO8?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "dewalt-oscillating-tool",
+      "asin": "B00SOU6LR4",
+      "name": "DEWALT 20V MAX XR Oscillating Tool Kit (DCS356D1)",
+      "section": "tools",
+      "category": "power-tools",
+      "badge": "Upgrade pick",
+      "whyWePickIt": "4.8★ from 5,600+ reviews. Battery and charger included. Handles flush cuts, trimming and detail sanding where bigger saws can't reach.",
+      "url": "https://www.amazon.com/dp/B00SOU6LR4?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "skil-jigsaw",
+      "asin": "B07FD341YS",
+      "name": "SKIL 6 Amp Corded Jig Saw (JS314901)",
+      "section": "tools",
+      "category": "power-tools",
+      "badge": "Budget pick",
+      "whyWePickIt": "4.7★ from 2,300+ reviews. Tool-free blade changes and an affordable way to cut curves and shapes in wood.",
+      "url": "https://www.amazon.com/dp/B07FD341YS?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "dewalt-dwe6421-sander",
+      "asin": "B014QUP28E",
+      "name": "DEWALT 5\" Random Orbit Palm Sander (DWE6421)",
+      "section": "tools",
+      "category": "sanding-finishing",
+      "badge": "Top pick",
+      "whyWePickIt": "4.8★ from 3,100+ reviews. 12,000 OPM random-orbit action for a smooth finish before stain or sealer.",
+      "url": "https://www.amazon.com/dp/B014QUP28E?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "skil-orbital-sander",
+      "asin": "B07FKBDNNQ",
+      "name": "SKIL 5\" Random Orbital Sander with Cyclonic Dust Box (SR211601)",
+      "section": "tools",
+      "category": "sanding-finishing",
+      "badge": "Budget pick",
+      "whyWePickIt": "4.5★ from 7,600+ reviews. A lower-cost random-orbit sander with a built-in dust box.",
+      "url": "https://www.amazon.com/dp/B07FKBDNNQ?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "sanding-discs-5in-52pk",
+      "asin": "B0DPMMNVKQ",
+      "name": "5\" 8-Hole Hook & Loop Sanding Discs, 52-Pack (60–320 grit)",
+      "section": "tools",
+      "category": "sanding-finishing",
+      "badge": null,
+      "whyWePickIt": "4.6★ from 1,000+ reviews. Mixed grits from coarse to fine, and they fit standard 5\" hook-and-loop sanders.",
+      "url": "https://www.amazon.com/dp/B0DPMMNVKQ?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "minwax-wood-finish-dark-walnut",
+      "asin": "B001CESFSM",
+      "name": "Minwax Wood Finish Stain, Dark Walnut, 1 Quart",
+      "section": "tools",
+      "category": "sanding-finishing",
+      "badge": null,
+      "whyWePickIt": "4.6★ from 11,000+ reviews. A classic oil-based stain. Other colors are available on the same listing.",
+      "url": "https://www.amazon.com/dp/B001CESFSM?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "swanson-speed-square",
+      "asin": "B00002255O",
+      "name": "Swanson 7\" Speed Square with Blue Book (S0101)",
+      "section": "tools",
+      "category": "hand-tools-measuring",
+      "badge": "Top pick",
+      "whyWePickIt": "4.8★ from 17,000+ reviews. Square cuts, angles and layout in one inexpensive aluminum tool.",
+      "url": "https://www.amazon.com/dp/B00002255O?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "dewalt-atomic-tape-30ft",
+      "asin": "B0C1LXSVSH",
+      "name": "DEWALT Atomic Compact 30 ft Tape Measure (DWHT38130S)",
+      "section": "tools",
+      "category": "hand-tools-measuring",
+      "badge": null,
+      "whyWePickIt": "4.8★ from 2,900+ reviews. Compact body with a 30 ft length, long enough for fences, decks and garden layouts.",
+      "url": "https://www.amazon.com/dp/B0C1LXSVSH?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "klein-torpedo-level",
+      "asin": "B01M302QTV",
+      "name": "Klein Tools 6\" Magnetic Torpedo Level (935AB4V)",
+      "section": "tools",
+      "category": "hand-tools-measuring",
+      "badge": null,
+      "whyWePickIt": "4.9★ from 6,000+ reviews. Small enough for a pocket. Use it to check posts, shelves and planter boxes.",
+      "url": "https://www.amazon.com/dp/B01M302QTV?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "milwaukee-fastback-knife",
+      "asin": "B082KL6HT3",
+      "name": "Milwaukee FASTBACK Compact Flip Utility Knife",
+      "section": "tools",
+      "category": "hand-tools-measuring",
+      "badge": null,
+      "whyWePickIt": "4.8★ from 1,000+ reviews. A compact folding knife for landscape fabric, packaging and scoring.",
+      "url": "https://www.amazon.com/dp/B082KL6HT3?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "kreg-r3-pocket-hole-jig",
+      "asin": "B000J43A7W",
+      "name": "Kreg R3 Pocket-Hole Jig System",
+      "section": "tools",
+      "category": "clamps-joinery",
+      "badge": "Top pick",
+      "whyWePickIt": "4.7★ from 9,200+ reviews. Strong, hidden screw joints without complex joinery. Popular for planters and benches.",
+      "url": "https://www.amazon.com/dp/B000J43A7W?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "kreg-pocket-screw-kit",
+      "asin": "B0756TGBXX",
+      "name": "Kreg Pocket-Hole Screw Starter Kit (SK04, 260 screws)",
+      "section": "tools",
+      "category": "clamps-joinery",
+      "badge": null,
+      "whyWePickIt": "4.8★ from 1,300+ reviews. Six common screw sizes that match Kreg jigs.",
+      "url": "https://www.amazon.com/dp/B0756TGBXX?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "jorgensen-24in-bar-clamps",
+      "asin": "B07K9ZV8MZ",
+      "name": "Jorgensen 24\" E-Z Hold Bar Clamps, 2-Pack",
+      "section": "tools",
+      "category": "clamps-joinery",
+      "badge": "Upgrade pick",
+      "whyWePickIt": "4.8★ from 2,600+ reviews. A longer reach and a 400 lb load limit for larger panels and frames.",
+      "url": "https://www.amazon.com/dp/B07K9ZV8MZ?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "titebond-iii-16oz",
+      "asin": "B0002YQ3KA",
+      "name": "Titebond III Ultimate Wood Glue, 16 oz",
+      "section": "tools",
+      "category": "clamps-joinery",
+      "badge": null,
+      "whyWePickIt": "4.8★ from 27,000+ reviews. A waterproof wood glue suited to outdoor projects.",
+      "url": "https://www.amazon.com/dp/B0002YQ3KA?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "nocry-safety-glasses",
+      "asin": "B07GB8Y11G",
+      "name": "NoCry Anti-Fog Safety Glasses",
+      "section": "tools",
+      "category": "safety-gear",
+      "badge": "Top pick",
+      "whyWePickIt": "4.5★ from 51,000+ reviews. Anti-fog, scratch-resistant wraparound lenses with an adjustable fit.",
+      "url": "https://www.amazon.com/dp/B07GB8Y11G?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "3m-peltor-earmuffs",
+      "asin": "B00009LI4K",
+      "name": "3M PELTOR Optime 105 Earmuffs",
+      "section": "tools",
+      "category": "safety-gear",
+      "badge": null,
+      "whyWePickIt": "4.7★ from 5,300+ reviews. Hearing protection for saws, sanders and grinders.",
+      "url": "https://www.amazon.com/dp/B00009LI4K?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "3m-8511-n95",
+      "asin": "B0002YKBV2",
+      "name": "3M 8511 N95 Valved Respirator, 10-Pack",
+      "section": "tools",
+      "category": "safety-gear",
+      "badge": null,
+      "whyWePickIt": "4.6★ from 16,000+ reviews. Dust protection for sanding and cutting.",
+      "url": "https://www.amazon.com/dp/B0002YKBV2?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "ironclad-ranchworx-gloves",
+      "asin": "B00DF29J5W",
+      "name": "Ironclad Ranchworx Leather Work Gloves",
+      "section": "tools",
+      "category": "safety-gear",
+      "badge": null,
+      "whyWePickIt": "4.6★ from 8,200+ reviews. Durable leather gloves for lumber, stone and yard work. Machine washable.",
+      "url": "https://www.amazon.com/dp/B00DF29J5W?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "avid-power-20v-drill",
+      "asin": "B07CR1GPBQ",
+      "name": "AVID POWER 20V Cordless Drill Set",
+      "section": "tools",
+      "category": "starter-kit",
+      "badge": "Best for beginners",
+      "whyWePickIt": "4.6★ from 23,000+ reviews. A lightweight drill set with battery, charger and 22 bits, built for home DIY and first projects.",
+      "url": "https://www.amazon.com/dp/B07CR1GPBQ?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "black-decker-orbital-sander",
+      "asin": "B00MLSS1SW",
+      "name": "BLACK+DECKER 5\" Random Orbit Sander (BDERO100)",
+      "section": "tools",
+      "category": "starter-kit",
+      "badge": "Best for beginners",
+      "whyWePickIt": "4.6★ from 15,000+ reviews. A simple, compact sander with dust bag. An easy first sander.",
+      "url": "https://www.amazon.com/dp/B00MLSS1SW?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "stanley-claw-hammer",
+      "asin": "B00HQM769I",
+      "name": "STANLEY Claw Hammer (FMHT1-51276)",
+      "section": "tools",
+      "category": "starter-kit",
+      "badge": "Best for beginners",
+      "whyWePickIt": "4.7★ from 600+ reviews. A lightweight claw hammer for nailing and pulling nails.",
+      "url": "https://www.amazon.com/dp/B00HQM769I?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "irwin-quick-grip-mini-4pk",
+      "asin": "B001DSY4QO",
+      "name": "IRWIN Quick-Grip 6\" Mini Bar Clamps, 4-Pack",
+      "section": "tools",
+      "category": "starter-kit",
+      "badge": "Best for beginners",
+      "whyWePickIt": "4.8★ from 18,000+ reviews. One-handed clamps that hold parts while you glue or screw.",
+      "url": "https://www.amazon.com/dp/B001DSY4QO?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "fox-fern-planter-12-black",
+      "asin": "B07D9W6T81",
+      "name": "Fox & Fern 12\" Large Planter, Black Matte",
+      "section": "shop",
+      "category": "planters",
+      "badge": "Top pick",
+      "whyWePickIt": "4.7★ from 7,200+ reviews. A clean modern planter for indoor or outdoor use. A white version is also available.",
+      "url": "https://www.amazon.com/dp/B07D9W6T81?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "veradek-tall-taper-planter",
+      "asin": "B077H5KVSJ",
+      "name": "Veradek Pure Series Tall Taper Planter",
+      "section": "shop",
+      "category": "planters",
+      "badge": null,
+      "whyWePickIt": "4.8★ from 6,700+ reviews. A tall tapered shape with an inner shelf, so it needs less soil. Good for front doors and porches.",
+      "url": "https://www.amazon.com/dp/B077H5KVSJ?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "mayne-fairfield-window-box",
+      "asin": "B002YVJ3N8",
+      "name": "Mayne Fairfield 48\" Self-Watering Window Box, Black",
+      "section": "shop",
+      "category": "planters",
+      "badge": null,
+      "whyWePickIt": "4.7★ from 3,000+ reviews. A self-watering window box for railings and windowsills.",
+      "url": "https://www.amazon.com/dp/B002YVJ3N8?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "wsmksz-hanging-planters",
+      "asin": "B0CRL9VF8R",
+      "name": "WSMKSZ 13\" Hanging Planters, 2-Pack",
+      "section": "shop",
+      "category": "planters",
+      "badge": "Budget pick",
+      "whyWePickIt": "4.7★ from 1,000+ reviews. Large hanging pots with drainage holes and chains.",
+      "url": "https://www.amazon.com/dp/B0CRL9VF8R?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "vego-raised-bed-9in1",
+      "asin": "B09FPXQGL5",
+      "name": "Vego Garden 9-in-1 Metal Raised Garden Bed (17\" tall)",
+      "section": "shop",
+      "category": "raised-beds",
+      "badge": "Top pick",
+      "whyWePickIt": "4.8★ from 1,600+ reviews. A modular metal bed that can be set up in 9 shapes.",
+      "url": "https://www.amazon.com/dp/B09FPXQGL5?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "land-guard-galvanized-oval",
+      "asin": "B09C8HR4Z9",
+      "name": "Land Guard Galvanized Oval Raised Garden Bed",
+      "section": "shop",
+      "category": "raised-beds",
+      "badge": "Budget pick",
+      "whyWePickIt": "4.5★ from 13,000+ reviews. A popular galvanized bed that is quick to assemble.",
+      "url": "https://www.amazon.com/dp/B09C8HR4Z9?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "best-choice-elevated-bed-72",
+      "asin": "B08ZG77N2M",
+      "name": "Best Choice Products 72x24x30\" Elevated Wood Garden Bed",
+      "section": "shop",
+      "category": "raised-beds",
+      "badge": null,
+      "whyWePickIt": "4.5★ from 11,000+ reviews. Waist height, so there is no bending. Good for patios and small yards.",
+      "url": "https://www.amazon.com/dp/B08ZG77N2M?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "yaheetech-wood-raised-bed",
+      "asin": "B07T3L3Z79",
+      "name": "Yaheetech Wooden Raised Garden Bed",
+      "section": "shop",
+      "category": "raised-beds",
+      "badge": null,
+      "whyWePickIt": "4.5★ from 2,700+ reviews. A simple wooden ground-level bed for vegetables and flowers.",
+      "url": "https://www.amazon.com/dp/B07T3L3Z79?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "brightech-solar-string-27ft",
+      "asin": "B075NS8YXG",
+      "name": "Brightech Ambience Pro Solar String Lights, 27 ft",
+      "section": "shop",
+      "category": "lighting",
+      "badge": "Top pick",
+      "whyWePickIt": "4.5★ from 26,000+ reviews. Solar-powered Edison-style bulbs with no outlet needed.",
+      "url": "https://www.amazon.com/dp/B075NS8YXG?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "denicmic-solar-pathway-10pk",
+      "asin": "B09W9H1V63",
+      "name": "DenicMic Solar Pathway Lights, 10-Pack",
+      "section": "shop",
+      "category": "lighting",
+      "badge": "Budget pick",
+      "whyWePickIt": "4.5★ from 10,000+ reviews. Stake-in solar lights for paths and garden borders.",
+      "url": "https://www.amazon.com/dp/B09W9H1V63?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "kooper-solar-lanterns-4pk",
+      "asin": "B0BTY14F3P",
+      "name": "KOOPER Flickering Flame Solar Lanterns, 4-Pack",
+      "section": "shop",
+      "category": "lighting",
+      "badge": null,
+      "whyWePickIt": "4.5★ from 3,300+ reviews. Hanging or tabletop lanterns with a flickering flame effect.",
+      "url": "https://www.amazon.com/dp/B0BTY14F3P?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "hmcity-solar-motion-lights",
+      "asin": "B07ZSC6TNB",
+      "name": "HMCITY 120 LED Solar Motion Sensor Lights",
+      "section": "shop",
+      "category": "lighting",
+      "badge": null,
+      "whyWePickIt": "4.4★ from 69,000+ reviews. Motion-activated wall lights for fences, sheds and entrances.",
+      "url": "https://www.amazon.com/dp/B07ZSC6TNB?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "sunnydaze-crossweave-36",
+      "asin": "B01LDMXXK2",
+      "name": "Sunnydaze Crossweave 36\" Wood-Burning Fire Pit",
+      "section": "shop",
+      "category": "fire-pits",
+      "badge": "Top pick",
+      "whyWePickIt": "4.5★ from 4,400+ reviews. A large round fire pit with a decorative crossweave design.",
+      "url": "https://www.amazon.com/dp/B01LDMXXK2?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "solo-stove-bonfire-stand",
+      "asin": "B0CKZBZ25K",
+      "name": "Solo Stove Bonfire 19.5\" Smokeless Fire Pit with Stand",
+      "section": "shop",
+      "category": "fire-pits",
+      "badge": "Upgrade pick",
+      "whyWePickIt": "4.8★ from 2,000+ reviews. A low-smoke stainless design, with a stand included to protect the surface below.",
+      "url": "https://www.amazon.com/dp/B0CKZBZ25K?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "ciays-propane-fire-table-28",
+      "asin": "B09GXJTTDN",
+      "name": "Ciays 28\" Propane Fire Pit Table (50,000 BTU)",
+      "section": "shop",
+      "category": "fire-pits",
+      "badge": null,
+      "whyWePickIt": "4.5★ from 2,900+ reviews. CSA-listed propane fire table with a lid. No wood or ash.",
+      "url": "https://www.amazon.com/dp/B09GXJTTDN?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "spark-screen-36",
+      "asin": "B0CP7W6XF7",
+      "name": "36\" Round Fire Pit Spark Screen with Poker",
+      "section": "shop",
+      "category": "fire-pits",
+      "badge": "Budget pick",
+      "whyWePickIt": "4.5★ from 700+ reviews. Keeps sparks in. Sized for 36\" fire pits.",
+      "url": "https://www.amazon.com/dp/B0CP7W6XF7?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "polywood-adirondack-black",
+      "asin": "B07BJ4GFR1",
+      "name": "POLYWOOD Classic Adirondack Chair, Black",
+      "section": "shop",
+      "category": "furniture",
+      "badge": "Top pick",
+      "whyWePickIt": "4.5★ from 700+ reviews. A weather-resistant recycled-plastic lumber chair in several colors.",
+      "url": "https://www.amazon.com/dp/B07BJ4GFR1?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "fdw-garden-bench-46",
+      "asin": "B097Y2B6WS",
+      "name": "FDW 46\" Outdoor Garden Bench, Black",
+      "section": "shop",
+      "category": "furniture",
+      "badge": "Budget pick",
+      "whyWePickIt": "4.7★ from 2,200+ reviews. A metal bench rated for 480 lbs.",
+      "url": "https://www.amazon.com/dp/B097Y2B6WS?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "pnaeut-hammock-stand",
+      "asin": "B08KRGRGXW",
+      "name": "PNAEUT Double Hammock with Stand",
+      "section": "shop",
+      "category": "furniture",
+      "badge": null,
+      "whyWePickIt": "4.6★ from 10,000+ reviews. A freestanding two-person hammock that needs no trees.",
+      "url": "https://www.amazon.com/dp/B08KRGRGXW?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "qsun-rocking-bistro-set",
+      "asin": "B09CDNXK56",
+      "name": "Qsun 3-Piece Rattan Rocking Bistro Set",
+      "section": "shop",
+      "category": "furniture",
+      "badge": null,
+      "whyWePickIt": "4.4★ from 2,500+ reviews. Two rocking chairs and a coffee table for small patios and porches.",
+      "url": "https://www.amazon.com/dp/B09CDNXK56?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "jonathan-y-outdoor-rug-8x10",
+      "asin": "B07T7L441K",
+      "name": "JONATHAN Y Moroccan Indoor/Outdoor Rug 8x10, Natural/Black",
+      "section": "shop",
+      "category": "decor",
+      "badge": "Top pick",
+      "whyWePickIt": "4.7★ from 6,100+ reviews. A textured indoor/outdoor rug for patios and decks.",
+      "url": "https://www.amazon.com/dp/B07T7L441K?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "utopia-outdoor-pillows-2pk",
+      "asin": "B0CZDTPF56",
+      "name": "Utopia Bedding 18x18 Water-Resistant Outdoor Pillows, 2-Pack",
+      "section": "shop",
+      "category": "decor",
+      "badge": "Budget pick",
+      "whyWePickIt": "4.7★ from 1,500+ reviews. Water-resistant throw pillows for outdoor seating.",
+      "url": "https://www.amazon.com/dp/B0CZDTPF56?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "bursvik-wind-chimes-37",
+      "asin": "B09VFQVNBH",
+      "name": "Bursvik 37\" Aluminum Wind Chimes, Black",
+      "section": "shop",
+      "category": "decor",
+      "badge": null,
+      "whyWePickIt": "4.8★ from 8,900+ reviews. Large aluminum chimes for porches and patios.",
+      "url": "https://www.amazon.com/dp/B09VFQVNBH?tag=backyardwithb-20",
+      "imageSource": "icon"
+    },
+    {
+      "id": "best-choice-bird-bath-28",
+      "asin": "B01HC76V9C",
+      "name": "Best Choice Products 28\" Pedestal Bird Bath",
+      "section": "shop",
+      "category": "decor",
+      "badge": null,
+      "whyWePickIt": "4.4★ from 13,000+ reviews. A resin pedestal bird bath for gardens and lawns.",
+      "url": "https://www.amazon.com/dp/B01HC76V9C?tag=backyardwithb-20",
+      "imageSource": "icon"
+    }
+  ]
+}

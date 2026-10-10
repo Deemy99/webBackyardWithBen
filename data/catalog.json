@@ -1,0 +1,110 @@
+{
+  "toolCategories": [
+    {
+      "id": "power-tools",
+      "title": "Power Tools",
+      "icon": "i-drill",
+      "blurb": "The loud ones. Saws, drills and sanders that do the heavy lifting."
+    },
+    {
+      "id": "sanding-finishing",
+      "title": "Sanding & Finishing",
+      "icon": "i-sander",
+      "blurb": "What makes a piece look finished, not just assembled."
+    },
+    {
+      "id": "hand-tools-measuring",
+      "title": "Hand Tools & Measuring",
+      "icon": "i-square",
+      "blurb": "Measure twice, cut once. The basics every build starts with."
+    },
+    {
+      "id": "clamps-joinery",
+      "title": "Clamps & Joinery",
+      "icon": "i-clamp",
+      "blurb": "Extra hands that hold everything square while the glue and screws do their job."
+    },
+    {
+      "id": "safety-gear",
+      "title": "Safety Gear",
+      "icon": "i-goggles",
+      "blurb": "Eyes, ears, lungs, hands. Not optional."
+    },
+    {
+      "id": "starter-kit",
+      "title": "Starter Kit for Beginners",
+      "icon": "i-toolbox",
+      "blurb": "Just starting out? Begin here and add the rest as your projects grow.",
+      "highlight": true
+    }
+  ],
+  "shopCategories": [
+    {
+      "id": "planters",
+      "title": "Planters",
+      "icon": "i-pot"
+    },
+    {
+      "id": "raised-beds",
+      "title": "Raised Beds",
+      "icon": "i-bed"
+    },
+    {
+      "id": "lighting",
+      "title": "Lighting",
+      "icon": "i-bulb"
+    },
+    {
+      "id": "fire-pits",
+      "title": "Fire Pits",
+      "icon": "i-fire"
+    },
+    {
+      "id": "furniture",
+      "title": "Furniture",
+      "icon": "i-chair"
+    },
+    {
+      "id": "decor",
+      "title": "Decor",
+      "icon": "i-chime"
+    }
+  ],
+  "guideCategories": [
+    {
+      "id": "gardening",
+      "title": "Gardening",
+      "icon": "i-leaf"
+    },
+    {
+      "id": "plants-trees",
+      "title": "Plants & Trees",
+      "icon": "i-tree"
+    },
+    {
+      "id": "landscaping",
+      "title": "Landscaping",
+      "icon": "i-bed"
+    },
+    {
+      "id": "outdoor-living",
+      "title": "Outdoor Living",
+      "icon": "i-chair"
+    },
+    {
+      "id": "bbq",
+      "title": "BBQ & Grilling",
+      "icon": "i-grill"
+    },
+    {
+      "id": "diy",
+      "title": "DIY Projects",
+      "icon": "i-hammer"
+    },
+    {
+      "id": "lawn",
+      "title": "Lawn Care",
+      "icon": "i-mower"
+    }
+  ]
+}

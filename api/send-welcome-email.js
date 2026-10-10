@@ -1,7 +1,7 @@
 /* =========================================================
    POST /api/send-welcome-email
 
-   Called from js/main.js right after a newsletter signup is
+   Called from js/newsletter.js right after a newsletter signup is
    durably stored in Supabase (see js/supabase-config.js). Sends
    a one-off welcome email via Resend. Uses only Node's built-in
    fetch — no npm dependency.
@@ -11,25 +11,24 @@
    Resend-verified sending domain for backyardwithben.com.
 ========================================================= */
 
-const FROM_EMAIL = "Ben from Backyard with Ben <ben@backyardwithben.com>";
+const FROM_EMAIL = "Backyard with Ben <ben@backyardwithben.com>";
 
 const WELCOME_EMAIL_HTML = `
 <div style="font-family: Arial, Helvetica, sans-serif; max-width: 560px; margin: 0 auto; color: #1a1a1a;">
     <h1 style="color: #1f5c3a; font-size: 22px;">Welcome to Backyard with Ben! 🌿</h1>
     <p style="font-size: 15px; line-height: 1.6;">
-        Thanks for joining the newsletter. You'll get practical backyard ideas,
-        gardening tips, landscaping inspiration, BBQ guides and DIY projects
-        straight to your inbox.
+        Thanks for joining the newsletter. You'll get top-rated tool picks,
+        smart buying tips and practical backyard guides straight to your inbox.
     </p>
     <p style="font-size: 15px; line-height: 1.6;">
-        In the meantime, check out the latest articles:
-        <a href="https://www.backyardwithben.com/blogs.html" style="color: #1f5c3a;">
-            backyardwithben.com/blogs.html
+        In the meantime, check out the latest guides:
+        <a href="https://www.backyardwithben.com/guides" style="color: #1f5c3a;">
+            backyardwithben.com/guides
         </a>
     </p>
     <p style="font-size: 15px; line-height: 1.6;">
         Talk soon,<br>
-        Ben
+        The Backyard with Ben team
     </p>
     <p style="font-size: 12px; color: #777; margin-top: 32px;">
         You're receiving this because you signed up at backyardwithben.com.

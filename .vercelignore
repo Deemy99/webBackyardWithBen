@@ -1,0 +1,12 @@
+# source / tooling files that the live site never serves
+.claude
+README.md
+scripts
+data/legal
+data/catalog.json
+data/products.json
+assets/images/uvodwoman.png
+assets/images/profilewoman.png
+assets/images/backyardwithbenLOGOaNAZEV.png
+data/product-types.json
+data/product-icons.mjs

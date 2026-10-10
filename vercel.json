@@ -1,0 +1,48 @@
+{
+  "redirects": [
+    {
+      "source": "/projects",
+      "destination": "/guides",
+      "permanent": true
+    },
+    {
+      "source": "/projects/:path*",
+      "destination": "/guides",
+      "permanent": true
+    },
+    {
+      "source": "/blogs.html",
+      "destination": "/guides",
+      "permanent": true
+    },
+    {
+      "source": "/about.html",
+      "destination": "/about",
+      "permanent": true
+    },
+    {
+      "source": "/affiliate-disclosure.html",
+      "destination": "/disclosure",
+      "permanent": true
+    },
+    {
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/contact",
+      "destination": "/contact.html"
+    },
+    {
+      "source": "/privacy",
+      "destination": "/privacy.html"
+    },
+    {
+      "source": "/terms",
+      "destination": "/terms.html"
+    }
+  ]
+}

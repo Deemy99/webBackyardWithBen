@@ -1,8 +1,8 @@
 /* =========================================================
    POST /api/contact
 
-   Receives the contact form (see contact.html + the fetch call
-   in js/main.js) and forwards it as an email to Ben via Resend.
+   Receives the contact form (see contact.html + js/contact.js)
+   and forwards it as an email to the team inbox via Resend.
    Uses only Node's built-in fetch — no npm dependency, matching
    scripts/publish-article.mjs's "no external packages" approach.
 
