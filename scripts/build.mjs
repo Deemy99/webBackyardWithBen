@@ -1,34 +1,48 @@
 #!/usr/bin/env node
 /* =========================================================
-   scripts/build.mjs — static page generator (no dependencies)
+   scripts/build.mjs — static site build (Vercel build command)
 
-   Reads data/products.json and data/catalog.json and writes:
+   Reads data/*.json and every published article from Supabase
+   (read-only, public key) and writes the whole site to dist/:
 
-     index.html                    home
-     tools/index.html              Ben's Tools
-     shop/index.html               Shop the Look
-     guides/index.html             guides (articles come from Supabase)
-     about/index.html, disclosure/index.html
-     sitemap.xml                   static part rewritten
-     data/product-cards.json       card HTML for article product blocks
+     index.html                    home (latest guides prerendered)
+     tools/, shop/, about/, disclosure/
+     guides/index.html             all guides, grouped by category
+     guides/<slug>/index.html      one full page per article
+     contact.html, privacy.html, terms.html, 404.html
+     sitemap.xml, robots.txt, llms.txt, llms-full.txt
+     + the static files (css, js, assets, ads.txt)
 
-   It also swaps the header/footer on the legacy pages
-   (contact, privacy, terms, article pages) for the shared ones.
-   Dark mode only. No videos, no projects.
+   Every page is complete without JavaScript. Fails (exit 1)
+   when Supabase returns no articles, so an empty guides
+   section is never deployed. Dark mode only.
 
-   Run:  node scripts/build.mjs        (or: npm run generate)
+   Run:  npm run build      (dist/ is not committed)
 ========================================================= */
 
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, existsSync, rmSync, cpSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import sanitizeHtml from "sanitize-html";
 import { PRODUCT_ICONS } from "../data/product-icons.mjs";
+import { fetchPublishedArticles } from "./lib/articles.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
+const DIST = join(ROOT, "dist");
 const SITE = "https://www.backyardwithben.com";
 const FB_URL = "https://www.facebook.com/profile.php?id=61593709666852";
 const LOGO = "/assets/images/backyardwithbenprofil.jpg";
 const SITE_OG = "/assets/images/og-image.jpg";
+const BRAND_DESC = "Backyard with Ben is a DIY and outdoor living site with top-rated tool picks, finished pieces to buy and practical guides on gardening, lawns, landscaping, grilling and backyard projects. Its host, Emma, is AI-generated.";
+
+const ORG_LD = {
+    "@context": "https://schema.org", "@type": "Organization", "@id": SITE + "/#organization",
+    name: "Backyard with Ben", url: SITE + "/", description: BRAND_DESC,
+    logo: { "@type": "ImageObject", url: SITE + "/assets/images/logo-dark-master.png" },
+    email: "ben@backyardwithben.com", sameAs: [FB_URL]
+};
+/* author/publisher on Article schema (no person: the host is AI-generated) */
+const ORG_REF = { "@type": "Organization", "@id": SITE + "/#organization", name: "Backyard with Ben", url: SITE + "/" };
 
 const readJson = (f) => JSON.parse(readFileSync(join(ROOT, f), "utf-8"));
 const productData = readJson("data/products.json");   /* { _meta, collections, products } */
@@ -42,7 +56,7 @@ const catIcon = new Map([...catalog.toolCategories, ...catalog.shopCategories].m
 
 const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const write = (rel, content) => {
-    const file = join(ROOT, rel);
+    const file = join(DIST, rel);
     mkdirSync(dirname(file), { recursive: true });
     writeFileSync(file, content);
 };
@@ -226,10 +240,24 @@ const FONTS = `<link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Source+Sans+3:wght@400;600;700&family=Zilla+Slab:wght@500;700&display=swap" rel="stylesheet">`;
 
-/* Full page shell */
-function page({ title, description, path, ogImage = SITE_OG, ogType = "website", current = "", body, bodyClass = "", scripts = "", jsonLd = "", extraHead = "", robots = "" }) {
+/* Bing Webmaster Tools: paste the content value of the msvalidate.01 meta
+   tag here (see README, "Bing Webmaster Tools"). Empty = no tag. */
+const BING_VERIFY = "";
+
+const ldScript = (obj) => `<script type="application/ld+json">${JSON.stringify(obj).replace(/</g, "\\u003c")}</script>`;
+
+/* BreadcrumbList for inner pages: [[name, path], ...] after Home;
+   the last item is the current page */
+const breadcrumbLd = (items) => ({
+    "@context": "https://schema.org", "@type": "BreadcrumbList",
+    itemListElement: [["Home", "/"], ...items].map(([name, path], i) => ({ "@type": "ListItem", position: i + 1, name, item: SITE + path }))
+});
+
+/* Full page shell. jsonLd: one schema object or an array of them */
+function page({ title, description, path, ogImage = SITE_OG, ogType = "website", current = "", body, bodyClass = "", scripts = "", jsonLd = [], extraHead = "", robots = "" }) {
     const url = SITE + path;
     const img = ogImage.startsWith("http") ? ogImage : SITE + ogImage;
+    const ld = (Array.isArray(jsonLd) ? jsonLd : [jsonLd]).filter(Boolean).map(ldScript).join("\n    ");
     return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -254,9 +282,10 @@ function page({ title, description, path, ogImage = SITE_OG, ogType = "website",
     <link rel="apple-touch-icon" href="${LOGO}">
     ${FONTS}
     <link rel="stylesheet" href="/css/workshop.css">
-    ${jsonLd ? `<script type="application/ld+json">${jsonLd}</script>` : ""}
+    ${ld}
     ${extraHead}
     ${robots ? `<meta name="robots" content="${robots}">` : ""}
+    ${BING_VERIFY ? `<meta name="msvalidate.01" content="${esc(BING_VERIFY)}">` : ""}
     <!-- analytics only after consent (see js/consent.js) -->
     <script type="text/plain" data-consent="analytics">window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
     <script type="text/plain" data-consent="analytics" data-src="/_vercel/insights/script.js"></script>
@@ -277,8 +306,6 @@ ${scripts}
 `;
 }
 
-const supabaseScripts = `<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="/js/supabase-config.js"></script>`;
 const newsletterScripts = `<script src="/js/newsletter.js" defer></script>`;
 
 /* ---------------------------------------------------------
@@ -324,6 +351,13 @@ function categoryCards(section, cat) {
     const found = products.filter((p) => p.section === section && p.category === cat);
     return found.length ? found.map((p) => productCard(p.id)) : [0, 1, 2, 3].map(() => emptySlot({ ico: catIcon.get(cat) }));
 }
+/* ItemList of product names + links only: no Product/Review/AggregateRating,
+   we neither sell nor review the products ourselves */
+const productListLd = (section, name) => ({
+    "@context": "https://schema.org", "@type": "ItemList", name,
+    itemListElement: products.filter((p) => p.section === section)
+        .map((p, i) => ({ "@type": "ListItem", position: i + 1, name: p.name, url: p.url }))
+});
 const collectionCards = (name) => (collections[name] || []).map(productCard);
 
 const tile = (href, ico, title, text) => `<a class="wb-tile" href="${href}"><span class="wb-tile__icon">${icon(ico, "")}</span><span><h3>${title}</h3><p>${text}</p></span>${icon("i-arrow", "wb-tile__arrow")}</a>`;
@@ -342,6 +376,122 @@ const howWePick = (kind) => `<details class="wb-howpick">
 </details>`;
 
 const tapeDivider = `<div class="wb-tape" role="presentation"></div>`;
+
+/* ---------------------------------------------------------
+   GUIDES (articles from Supabase, prerendered at build time)
+
+   Supabase is the source of truth for the content (title = H1,
+   excerpt = lead, meta_description, cover_image_alt,
+   content_html). data/article-seo.json only adds what the
+   database has no column for: seoTitle (<title> tag), related
+   slugs and product blocks.
+--------------------------------------------------------- */
+let articles = [];                                   /* filled in RUN */
+const articleSeo = readJson("data/article-seo.json");
+const guideCats = catalog.guideCategories;
+const catLabel = (id) => (guideCats.find((c) => c.id === id) || {}).title || "More guides";
+const guideUrl = (slug) => `/guides/${slug}`;
+const fmtDate = (iso) => new Date(iso).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric", timeZone: "UTC" });
+const isoDay = (iso) => new Date(iso).toISOString().slice(0, 10);
+const textOf = (html) => String(html || "").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
+const decodeEntities = (s) => s.replace(/&#39;|&#x27;/g, "'").replace(/&quot;/g, '"').replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&");
+const wordCount = (html) => textOf(html).split(" ").filter(Boolean).length;
+
+/* All guide cover images are AI-generated: the alt text says so (Round 5) */
+const aiAlt = (t) => {
+    t = String(t || "").trim();
+    if (/^AI-generated/i.test(t)) return t;
+    return "AI-generated image of " + (/^[A-Z][a-z]/.test(t) ? t[0].toLowerCase() + t.slice(1) : t);
+};
+
+/* Covers: /assets/images/articles/<name>-1280.webp has siblings
+   -640/-960/-1672.webp and <name>-og.jpg (scripts/make-article-images.mjs).
+   Any other URL is used as it is. */
+const COVER_WIDTHS = [640, 960, 1280, 1672];
+function cover(a) {
+    const url = a.cover_image_url || "";
+    const m = url.match(/^(\/assets\/images\/articles\/.+)-\d+\.webp$/);
+    if (!m) return { src: url, srcset: "", og: url || SITE_OG };
+    const ws = COVER_WIDTHS.filter((w) => existsSync(join(ROOT, `${m[1]}-${w}.webp`)));
+    return {
+        src: `${m[1]}-${ws.includes(1280) ? 1280 : ws[ws.length - 1]}.webp`,
+        srcset: ws.map((w) => `${m[1]}-${w}.webp ${w}w`).join(", "),
+        og: existsSync(join(ROOT, `${m[1]}-og.jpg`)) ? `${m[1]}-og.jpg` : url
+    };
+}
+const coverImg = (a, { sizes, priority = false, w = 640, h = 400 }) => {
+    const c = cover(a);
+    if (!c.src) return "";
+    return `<img src="${esc(c.src)}"${c.srcset ? ` srcset="${c.srcset}" sizes="${sizes}"` : ""} alt="${esc(aiAlt(a.cover_image_alt || a.title))}" width="${w}" height="${h}" ${priority ? 'fetchpriority="high" decoding="async"' : 'loading="lazy" decoding="async"'}>`;
+};
+
+const CARD_SIZES = "(min-width: 1100px) 360px, (min-width: 700px) 45vw, 92vw";
+const guideCard = (a, showCat = false) => `<article class="wb-card"><div class="wb-card__thumb">${coverImg(a, { sizes: CARD_SIZES })}${a.cover_image_url ? aiBadge("wb-ai-badge--card") : ""}${showCat ? `<span class="wb-card__cat">${esc(catLabel(a.category))}</span>` : ""}</div><div class="wb-card__body"><h3 class="wb-card__title"><a href="${guideUrl(a.slug)}">${esc(a.title)}</a></h3>${a.excerpt ? `<p class="wb-card__excerpt">${esc(a.excerpt)}</p>` : ""}</div></article>`;
+
+/* articles grouped by guide category, in catalog order; unknown ones last */
+function guideGroups() {
+    const known = new Set(guideCats.map((c) => c.id));
+    const groups = guideCats.map((c) => ({ ...c, items: articles.filter((a) => a.category === c.id) })).filter((g) => g.items.length);
+    const more = articles.filter((a) => !known.has(a.category));
+    if (more.length) groups.push({ id: "more-guides", title: "More guides", icon: "i-leaf", items: more });
+    return groups;
+}
+
+/* Article body: legacy link/label fixes, then a strict allow-list sanitizer */
+const SANITIZE = {
+    allowedTags: ["div", "section", "span", "p", "br", "h2", "h3", "h4", "strong", "b", "em", "i", "u", "ul", "ol", "li", "a",
+        "blockquote", "figure", "figcaption", "img", "table", "caption", "thead", "tbody", "tfoot", "tr", "th", "td", "hr", "code", "small", "sup", "sub"],
+    allowedAttributes: {
+        "*": ["class", "id"],
+        a: ["href", "title", "rel", "target"],
+        img: ["src", "srcset", "sizes", "alt", "width", "height", "loading", "decoding"],
+        th: ["scope", "colspan", "rowspan"], td: ["colspan", "rowspan"]
+    },
+    allowedSchemes: ["https", "http", "mailto"],
+    allowedSchemesAppliedToAttributes: ["href", "src"],
+    allowProtocolRelative: false,
+    transformTags: {
+        a: (tag, attribs) => {
+            if (/^https?:\/\//.test(attribs.href || "") && !(attribs.href || "").startsWith(SITE)) {
+                return { tagName: "a", attribs: { ...attribs, target: "_blank", rel: attribs.rel || "noopener" } };
+            }
+            return { tagName: "a", attribs };
+        },
+        img: (tag, attribs) => ({ tagName: "img", attribs: { loading: "lazy", decoding: "async", ...attribs } })
+    }
+};
+function articleBody(a, seo) {
+    let html = a.content_html || "";
+    for (const [from, to] of seo.replace || []) html = html.split(from).join(to);
+    html = html
+        .replace(/href="(?:\.\.\/|\/)?blogs\.html\?category=([a-z-]+)"/g, 'href="/guides#$1"')
+        .replace(/href="(?:\.\.\/|\/)?blogs\.html"/g, 'href="/guides"')
+        .replace(/href="(?:https:\/\/www\.backyardwithben\.com)?\/?(?:\.\.\/)?articles\/view\.html\?slug=([a-z0-9-]+)"/g, 'href="/guides/$1"')
+        .replace(/<strong>\s*Ben(?:'|&#39;|’)s Tip\s*<\/strong>/gi, "<strong>Pro tip</strong>");
+    return sanitizeHtml(html, SANITIZE);
+}
+
+/* FAQ pairs from the article's own FAQ section (.article-faq-item: h3 + p) */
+function faqPairs(html) {
+    const out = [];
+    const re = /<div class="article-faq-item">\s*<h3[^>]*>([\s\S]*?)<\/h3>([\s\S]*?)<\/div>/g;
+    let m;
+    while ((m = re.exec(html))) {
+        const q = decodeEntities(textOf(m[1])), ans = decodeEntities(textOf(m[2]));
+        if (q && ans) out.push({ q, a: ans });
+    }
+    return out;
+}
+
+function relatedArticles(a, seo) {
+    const bySlug = new Map(articles.map((x) => [x.slug, x]));
+    const picked = (seo.related || []).map((s) => bySlug.get(s)).filter((x) => x && x.slug !== a.slug);
+    for (const x of articles) {
+        if (picked.length >= 3) break;
+        if (x.slug !== a.slug && x.category === a.category && !picked.includes(x)) picked.push(x);
+    }
+    return picked.slice(0, 3);
+}
 
 /* ---------------------------------------------------------
    PAGES
@@ -390,8 +540,7 @@ ${tapeDivider}
 <section class="wb-section wb-section--alt" aria-labelledby="guides-h">
     <div class="wb-container">
         <div class="wb-section-head"><div><span class="wb-eyebrow">Fresh reads</span><h2 id="guides-h">Latest guides</h2></div><a class="wb-link-arrow" href="/guides">All guides ${icon("i-arrow", "")}</a></div>
-        <div class="wb-grid wb-grid--3 wb-grid--guides" id="home-guides" data-limit="3" aria-live="polite"><p class="wb-guide-state">Loading the latest guides…</p></div>
-        <noscript><p><a href="/guides">Browse all guides</a></p></noscript>
+        <div class="wb-grid wb-grid--3 wb-grid--guides" id="home-guides">${articles.slice(0, 3).map((a) => guideCard(a, true)).join("")}</div>
     </div>
 </section>
 <section class="wb-section" aria-labelledby="host-h">
@@ -409,9 +558,12 @@ ${newsletterHtml()}`;
     return page({
         title: "Backyard with Ben | Tools, Shop the Look & Backyard Guides",
         description: "Top-rated tool picks based on specs and verified reviews, finished pieces to buy and practical guides for your backyard and outdoor living space.",
-        path: "/", current: "", body, scripts: supabaseScripts + newsletterScripts + `\n<script src="/js/guides.js" defer></script>` + stickyToolsBtn,
+        path: "/", current: "", body, scripts: newsletterScripts + stickyToolsBtn,
         extraHead: `<link rel="preload" as="image" imagesrcset="${heroSrcset}" imagesizes="100vw" fetchpriority="high">`,
-        jsonLd: JSON.stringify({ "@context": "https://schema.org", "@type": "WebSite", name: "Backyard with Ben", url: SITE + "/", sameAs: [FB_URL] })
+        jsonLd: [ORG_LD, {
+            "@context": "https://schema.org", "@type": "WebSite", "@id": SITE + "/#website", name: "Backyard with Ben",
+            url: SITE + "/", description: BRAND_DESC, inLanguage: "en-US", publisher: { "@id": SITE + "/#organization" }
+        }]
     });
 }
 
@@ -442,7 +594,8 @@ ${newsletterHtml()}`;
     return page({
         title: "Ben's Tools | Top Tool Picks for Backyard DIY | Backyard with Ben",
         description: "Our top tool picks for backyard DIY, chosen from specs, ratings and verified reviews: power tools, sanding, measuring, clamps, safety gear and a starter kit.",
-        path: "/tools", current: "/tools", body, scripts: newsletterScripts
+        path: "/tools", current: "/tools", body, scripts: newsletterScripts,
+        jsonLd: [breadcrumbLd([["Ben's Tools", "/tools"]]), productListLd("tools", "Ben's Tools: top tool picks for backyard DIY")]
     });
 }
 
@@ -470,30 +623,128 @@ ${newsletterHtml()}`;
     return page({
         title: "Shop the Look | Planters, Beds, Lighting & More | Backyard with Ben",
         description: "Don't want to build it yourself? Shop finished planters, raised beds, lighting, fire pits, furniture and decor we picked.",
-        path: "/shop", current: "/shop", body, scripts: newsletterScripts + stickyToolsBtn
+        path: "/shop", current: "/shop", body, scripts: newsletterScripts + stickyToolsBtn,
+        jsonLd: [breadcrumbLd([["Shop the Look", "/shop"]]), productListLd("shop", "Shop the Look: finished backyard pieces")]
     });
 }
 
 function guidesPage() {
-    const cats = JSON.stringify(catalog.guideCategories).replace(/</g, "\\u003c");
+    const groups = guideGroups();
+    const sections = groups.map((g) => `<section class="wb-cat" id="${g.id}" aria-labelledby="${g.id}-h">
+    <div class="wb-container">
+        <div class="wb-cat__title">${icon(g.icon || "i-leaf", "")}<h2 id="${g.id}-h">${esc(g.title)} guides</h2></div>
+        <div class="wb-grid wb-grid--3 wb-grid--guides">${g.items.map((a) => guideCard(a)).join("")}</div>
+    </div>
+</section>`).join("\n");
     const body = `
 <section class="wb-section wb-section--tight">
     <div class="wb-container">
         <span class="wb-eyebrow">Read up</span>
-        <h1>Guides</h1>
-        <p class="wb-lede">Practical backyard guides on gardening, landscaping, grilling, lawns and more.</p>
+        <h1>Backyard guides</h1>
+        <p class="wb-lede">Practical backyard guides on gardening, landscaping, grilling, lawns and more: ${articles.length} guides in ${groups.length} categories.</p>
     </div>
 </section>
-<nav class="wb-tabs" id="guide-tabs" aria-label="Guide categories" hidden><ul></ul></nav>
-<div id="guide-sections" aria-live="polite"><div class="wb-container"><p class="wb-guide-state" id="guide-state">Loading guides…</p></div></div>
-<noscript><div class="wb-container"><p>Guides need JavaScript to load. Please enable it and reload.</p></div></noscript>
-<script id="guide-cats" type="application/json">${cats}</script>
+${tabBar("Guide categories", groups)}
+${sections}
 ${newsletterHtml()}`;
     return page({
-        title: "Backyard Guides | Gardening, Landscaping, BBQ & More | Backyard with Ben",
-        description: "Practical backyard guides: gardening, plants and trees, landscaping, outdoor living, BBQ and grilling, DIY and lawn care.",
+        title: "Backyard Guides: Gardening, Lawn, BBQ & DIY | Backyard with Ben",
+        description: "Practical backyard guides on gardening, plants and trees, landscaping, lawn care, outdoor living, BBQ and grilling and weekend DIY projects, all in one place.",
         path: "/guides", current: "/guides", body,
-        scripts: supabaseScripts + newsletterScripts + `\n<script src="/js/guides.js" defer></script>` + stickyToolsBtn
+        scripts: newsletterScripts + stickyToolsBtn,
+        jsonLd: [breadcrumbLd([["Guides", "/guides"]]), {
+            "@context": "https://schema.org", "@type": "CollectionPage", name: "Backyard guides", url: SITE + "/guides",
+            isPartOf: { "@id": SITE + "/#website" },
+            mainEntity: { "@type": "ItemList", itemListElement: articles.map((a, i) => ({ "@type": "ListItem", position: i + 1, url: SITE + guideUrl(a.slug), name: a.title })) }
+        }]
+    });
+}
+
+/* One fully rendered article page (works without JavaScript) */
+function articlePage(a) {
+    const seo = articleSeo[a.slug] || {};
+    const path = guideUrl(a.slug);
+    const url = SITE + path;
+    const cat = catLabel(a.category);
+    const h1 = seo.h1 || a.title;
+    const title = seo.seoTitle || `${a.title} | Backyard with Ben`;
+    const desc = seo.metaDescription || a.meta_description || a.excerpt || "";
+    const lead = seo.lead || a.excerpt || "";
+    const html = articleBody(a, seo);
+    const faq = faqPairs(html);
+    const c = cover(a);
+    const minutes = a.read_time_minutes || Math.max(1, Math.round(wordCount(html) / 200));
+    const modified = a.updated_at || a.published_at;
+    const updatedLater = isoDay(modified) > isoDay(a.published_at);
+    const related = relatedArticles(a, seo);
+    const productGroups = (seo.products || []).map((g, i) => {
+        const cards = (g.ids || []).filter((id) => productById.has(id)).map(productCard).join("");
+        return cards ? `<h2 id="gtools-h-${i}">${icon(i === 0 && /^Tools/.test(g.title) ? "i-drill" : "i-pot", "")} ${esc(g.title)}</h2><div class="wb-prodgrid wb-prodgrid--guide">${cards}</div>` : "";
+    }).join("");
+    const catHref = guideCats.some((g) => g.id === a.category) ? `/guides#${a.category}` : "/guides#more-guides";
+    const shareHref = "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url);
+    const heroSizes = "(min-width: 1240px) 1200px, 100vw";
+
+    const body = `
+<article id="article-content">
+    <header class="wb-article-head">
+        <div class="wb-narrow">
+            <nav class="wb-crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">›</span><a href="/guides">Guides</a><span aria-hidden="true">›</span><a href="${catHref}">${esc(cat)}</a></nav>
+            <a class="wb-cat-pill" href="${catHref}">${esc(cat)}</a>
+            <h1>${esc(h1)}</h1>
+            ${lead ? `<p class="wb-lede">${esc(lead)}</p>` : ""}
+            <div class="wb-byline"><img class="wb-byline__logo" src="/assets/images/logo-dark-h48.png" alt="" width="105" height="32"><span>By the <strong>Backyard with Ben</strong> team</span><span aria-hidden="true">·</span><span>${updatedLater
+                ? `Updated <time datetime="${isoDay(modified)}">${fmtDate(modified)}</time>`
+                : `Published <time datetime="${isoDay(a.published_at)}">${fmtDate(a.published_at)}</time>`} · ${minutes} min read</span></div>
+        </div>
+    </header>
+    ${c.src ? `<figure class="wb-article-hero">${aiBadge()}${coverImg(a, { sizes: heroSizes, priority: true, w: 1672, h: 941 })}</figure>` : ""}
+    <div class="wb-narrow"><div class="wb-article-body">${html}</div>
+        <p class="wb-article-dates">Published <time datetime="${isoDay(a.published_at)}">${fmtDate(a.published_at)}</time>${updatedLater ? ` · Last updated <time datetime="${isoDay(modified)}">${fmtDate(modified)}</time>` : ""}. Written by the Backyard with Ben team from standard, widely published guidance. <a href="/about">About us</a>.</p>
+    </div>
+    <div class="wb-narrow wb-article-extra">
+        ${productGroups ? `<section class="wb-box" id="article-tools" aria-label="Products for this guide">
+            ${disclosureNote()}
+            ${productGroups}
+        </section>` : ""}
+        <p class="wb-share"><a class="wb-btn wb-btn--ghost wb-btn--sm" href="${shareHref}" target="_blank" rel="noopener">${icon("i-facebook", "")} Share on Facebook</a></p>
+    </div>
+    <section class="wb-section wb-section--alt wb-keep" aria-labelledby="keep-h">
+        <div class="wb-container">
+            <div class="wb-keep__head">
+                <span class="wb-eyebrow">Keep going</span>
+                <h2 id="keep-h">More for your backyard</h2>
+                <p>Gear up with our top-rated tool picks, shop the look if you'd rather buy than build, or read a related guide. <a href="${catHref}">See all ${esc(cat)} guides</a>.</p>
+                <div class="wb-keep__actions"><a class="wb-btn wb-btn--sm" href="/tools">${icon("i-drill", "")} Ben's Tools</a><a class="wb-btn wb-btn--sm wb-btn--primary" href="/shop">${icon("i-pot", "")} Shop the Look</a></div>
+            </div>
+            ${related.length ? `<h3 class="sr-only">Related guides</h3><div class="wb-cards-center wb-grid--guides">${related.map((r) => guideCard(r, true)).join("")}</div>` : ""}
+        </div>
+    </section>
+</article>
+${newsletterHtml()}`;
+
+    const ldImage = c.src ? [SITE + c.og, SITE + c.src] : undefined;
+    return page({
+        title, description: desc, path, ogImage: c.og || SITE_OG, ogType: "article", current: "/guides", body,
+        scripts: newsletterScripts,
+        extraHead: [
+            `<meta property="article:published_time" content="${new Date(a.published_at).toISOString()}">`,
+            `<meta property="article:modified_time" content="${new Date(modified).toISOString()}">`,
+            `<meta property="article:section" content="${esc(cat)}">`,
+            c.srcset ? `<link rel="preload" as="image" imagesrcset="${c.srcset}" imagesizes="${heroSizes}" fetchpriority="high">` : ""
+        ].filter(Boolean).join("\n    "),
+        jsonLd: [
+            {
+                "@context": "https://schema.org", "@type": "Article", "@id": url + "#article",
+                headline: h1, description: desc, image: ldImage, url, mainEntityOfPage: url,
+                datePublished: new Date(a.published_at).toISOString(), dateModified: new Date(modified).toISOString(),
+                author: ORG_REF, publisher: { ...ORG_REF, logo: ORG_LD.logo },
+                articleSection: cat, wordCount: wordCount(html), inLanguage: "en-US",
+                isPartOf: { "@id": SITE + "/#website" }
+            },
+            breadcrumbLd([["Guides", "/guides"], [cat, catHref], [h1, path]]),
+            faq.length ? { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) } : null
+        ]
     });
 }
 
@@ -639,96 +890,127 @@ ${newsletterHtml()}`;
     return page({ title: "Page not found | Backyard with Ben", description: "This page could not be found.", path: "/404.html", body, scripts: newsletterScripts, robots: "noindex, follow" });
 }
 
+
 /* ---------------------------------------------------------
-   ARTICLE SHELL (content is filled in by js/article-view.js)
+   SITEMAP (indexable pages only, articles with lastmod + image)
 --------------------------------------------------------- */
-function articleShell(path) {
-    const body = `
-<section id="article-not-found" class="wb-section" hidden>
-    <div class="wb-container wb-prose">
-        <span class="wb-eyebrow">Guide not found</span>
-        <h2 class="wb-h1">We couldn't find that guide.</h2>
-        <p class="wb-lede">It may have been unpublished or the link may be outdated. Browse the guides to find something else to read.</p>
-        <a class="wb-btn" href="/guides">Back to the guides ${icon("i-arrow", "")}</a>
-    </div>
-</section>
-<article id="article-content">
-    <header class="wb-article-head">
-        <div class="wb-narrow">
-            <nav class="wb-crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">›</span><a href="/guides">Guides</a><span aria-hidden="true">›</span><a id="article-breadcrumb-category" href="/guides">Category</a></nav>
-            <a id="article-category-badge" class="wb-cat-pill" href="/guides">Category</a>
-            <h1 id="article-title">Loading guide…</h1>
-            <p id="article-lead" class="wb-lede"></p>
-            <div class="wb-byline"><img class="wb-byline__logo" src="/assets/images/logo-dark-h48.png" alt="" width="105" height="32"><span>By the <strong>Backyard with Ben</strong> team</span><span aria-hidden="true">·</span><span id="article-date"></span></div>
-        </div>
-    </header>
-    <figure class="wb-article-hero">${aiBadge()}<img id="article-hero-img" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="" width="1200" height="675" fetchpriority="high" decoding="async"></figure>
-    <div class="wb-narrow"><div class="wb-article-body" id="article-body-content"></div></div>
-    <div class="wb-narrow wb-article-extra">
-        <section class="wb-box" id="article-tools" aria-label="Products for this guide" hidden>
-            ${disclosureNote()}
-            <div id="article-tools-groups"></div>
-        </section>
-        <p class="wb-share"><a class="wb-btn wb-btn--ghost wb-btn--sm" id="article-share-facebook" href="${FB_URL}" target="_blank" rel="noopener">${icon("i-facebook", "")} Share on Facebook</a></p>
-    </div>
-    <section class="wb-section wb-section--alt wb-keep" aria-labelledby="keep-h">
-        <div class="wb-container">
-            <div class="wb-keep__head">
-                <span class="wb-eyebrow">Keep going</span>
-                <h2 id="keep-h">More for your backyard</h2>
-                <p>Gear up with our top-rated tool picks, shop the look if you'd rather buy than build, or read a related guide.</p>
-                <div class="wb-keep__actions"><a class="wb-btn wb-btn--sm" href="/tools">${icon("i-drill", "")} Ben's Tools</a><a class="wb-btn wb-btn--sm wb-btn--primary" href="/shop">${icon("i-pot", "")} Shop the Look</a></div>
-            </div>
-            <div class="wb-cards-center wb-grid--guides" id="related-articles-grid" aria-label="Related guides"></div>
-        </div>
-    </section>
-</article>
-${newsletterHtml()}`;
-    return page({
-        title: "Backyard Guide | Backyard with Ben",
-        description: "Practical backyard, gardening and outdoor living guides from Backyard with Ben.",
-        path, ogType: "article", current: "/guides", body,
-        scripts: `${supabaseScripts}
-<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
-${newsletterScripts}
-<script src="/js/article-view.js" defer></script>`
-    });
+function sitemapXml() {
+    const entry = (path, extra = "") => `  <url>\n    <loc>${SITE}${path}</loc>\n${extra}  </url>\n`;
+    const latest = articles.reduce((m, a) => (a.updated_at > m ? a.updated_at : m), articles[0].updated_at);
+    let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n`;
+    xml += entry("/") + entry("/tools") + entry("/shop") + entry("/guides", `    <lastmod>${isoDay(latest)}</lastmod>\n`) + entry("/about");
+    for (const a of articles) {
+        const c = cover(a);
+        xml += entry(guideUrl(a.slug), `    <lastmod>${isoDay(a.updated_at || a.published_at)}</lastmod>\n` +
+            (c.src ? `    <image:image><image:loc>${esc(SITE + c.src)}</image:loc></image:image>\n` : ""));
+    }
+    return xml + "</urlset>\n";
 }
 
 /* ---------------------------------------------------------
-   SITEMAP: only pages that should be indexed.
-   Keeps the article entries (view.html?slug=...) that
-   scripts/publish-article.mjs maintains.
+   ROBOTS + LLMS (search and AI crawlers are welcome)
 --------------------------------------------------------- */
-function updateSitemap() {
-    const file = join(ROOT, "sitemap.xml");
-    const current = readFileSync(file, "utf-8");
-    const marker = "<loc>" + SITE + "/articles/view.html";
-    const idx = current.indexOf(marker);
-    const tail = idx === -1 ? "</urlset>\n" : current.slice(current.lastIndexOf("<url>", idx));
-    const url = (path, freq, prio) => `    <url>\n        <loc>${SITE}${path}</loc>\n        <changefreq>${freq}</changefreq>\n        <priority>${prio}</priority>\n    </url>\n\n`;
-    let head = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n\n`;
-    head += url("/", "weekly", "1.0") + url("/tools", "weekly", "0.9") + url("/shop", "weekly", "0.8") + url("/guides", "weekly", "0.9") + url("/about", "monthly", "0.6");
-    writeFileSync(file, head + tail);
+const CRAWLERS = ["Googlebot", "Google-Extended", "Bingbot", "GPTBot", "OAI-SearchBot", "ChatGPT-User", "PerplexityBot", "ClaudeBot", "Claude-SearchBot", "Applebot", "Applebot-Extended"];
+const robotsTxt = () => `# Backyard with Ben: search engines and AI assistants are welcome to crawl and cite this site.
+User-agent: *
+Allow: /
+
+${CRAWLERS.map((b) => `User-agent: ${b}\nAllow: /`).join("\n\n")}
+
+Sitemap: ${SITE}/sitemap.xml
+`;
+
+/* Article HTML -> clean Markdown for llms-full.txt */
+function htmlToMd(html) {
+    const abs = (h) => (h.startsWith("/") ? SITE + h : h);
+    let s = html
+        .replace(/<span class="article-number">[\s\S]*?<\/span>/g, "")
+        .replace(/<div class="article-tags">[\s\S]*?<\/div>/g, "")
+        .replace(/<table[\s\S]*?<\/table>/g, (t) => {
+            const rows = [...t.matchAll(/<tr[^>]*>([\s\S]*?)<\/tr>/g)].map((r) => [...r[1].matchAll(/<t[hd][^>]*>([\s\S]*?)<\/t[hd]>/g)].map((c) => textOf(c[1])));
+            if (!rows.length) return "";
+            return "\n\n" + rows.map((r, i) => `| ${r.join(" | ")} |` + (i === 0 ? `\n|${r.map(() => " --- |").join("")}` : "")).join("\n") + "\n\n";
+        })
+        .replace(/<a [^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g, (m, h, t) => `[${textOf(t)}](${abs(h)})`)
+        .replace(/<(strong|b)>([\s\S]*?)<\/\1>/g, "**$2**")
+        .replace(/<(em|i)>([\s\S]*?)<\/\1>/g, "_$2_")
+        .replace(/<h2[^>]*>([\s\S]*?)<\/h2>/g, (m, t) => `\n\n## ${textOf(t)}\n\n`)
+        .replace(/<h3[^>]*>([\s\S]*?)<\/h3>/g, (m, t) => `\n\n### ${textOf(t)}\n\n`)
+        .replace(/<li[^>]*>([\s\S]*?)<\/li>/g, (m, t) => `\n- ${t.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim()}`)
+        .replace(/<\/(p|ul|ol|div|section|blockquote)>/g, "\n\n")
+        .replace(/<br\s*\/?>/g, "\n")
+        .replace(/<[^>]+>/g, "");
+    s = decodeEntities(s).split("\n").map((l) => l.replace(/[ \t]+/g, " ").trim()).join("\n");
+    return s.replace(/\n{3,}/g, "\n\n").trim();
+}
+
+function llmsTxt() {
+    const groups = guideGroups();
+    return `# Backyard with Ben
+
+> ${BRAND_DESC}
+
+Backyard with Ben (${SITE}) publishes practical, beginner-friendly backyard guides and curated product picks. Guides are written by the Backyard with Ben team from standard, widely published guidance; products are picked from specs, ratings and verified customer reviews and are not physically tested. The host, Emma, is an AI-generated character. Product links are Amazon affiliate links. Prices are never shown on the site.
+
+## Main pages
+
+- [Guides](${SITE}/guides): all ${articles.length} guides, grouped by category
+- [Ben's Tools](${SITE}/tools): top tool picks for backyard DIY (power tools, sanding, measuring, clamps, safety gear, starter kit)
+- [Shop the Look](${SITE}/shop): finished planters, raised beds, lighting, fire pits, furniture and decor
+- [About](${SITE}/about): who is behind the site and how picks are made
+- [Affiliate & AI disclosure](${SITE}/disclosure)
+
+${groups.map((g) => `## ${g.title}\n\n${g.items.map((a) => `- [${a.title}](${SITE}${guideUrl(a.slug)}): ${a.meta_description || a.excerpt || ""}`).join("\n")}`).join("\n\n")}
+
+## Optional
+
+- [Full text of every guide](${SITE}/llms-full.txt): clean Markdown, regenerated on every publish
+`;
+}
+
+function llmsFullTxt() {
+    return `# Backyard with Ben: full guide text\n\n> ${BRAND_DESC}\n\nSource: ${SITE}. Generated from the published guides on every build.\n\n` + articles.map((a) => {
+        const seo = articleSeo[a.slug] || {};
+        return `---\n\n# ${seo.h1 || a.title}\n\nURL: ${SITE}${guideUrl(a.slug)}\nCategory: ${catLabel(a.category)}\nLast updated: ${isoDay(a.updated_at || a.published_at)}\n\n${a.excerpt ? a.excerpt + "\n\n" : ""}${htmlToMd(articleBody(a, seo))}\n`;
+    }).join("\n");
+}
+
+/* ---------------------------------------------------------
+   STATIC FILES copied into dist/ (source-only files stay out)
+--------------------------------------------------------- */
+const STATIC = ["css", "assets", "ads.txt", "js/consent.js", "js/site.js", "js/newsletter.js", "js/contact.js", "js/supabase-config.js"];
+const STATIC_SKIP = ["assets/images/uvodwoman.png", "assets/images/profilewoman.png", "assets/images/backyardwithbenLOGOaNAZEV.png"].map((f) => join(ROOT, f));
+function copyStatic() {
+    for (const rel of STATIC) {
+        cpSync(join(ROOT, rel), join(DIST, rel), { recursive: true, filter: (src) => !STATIC_SKIP.includes(src) && !src.endsWith(".DS_Store") });
+    }
 }
 
 /* ---------------------------------------------------------
    RUN
 --------------------------------------------------------- */
+articles = (await fetchPublishedArticles()).filter((a) => /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(a.slug || ""));
+if (!articles.length) {
+    console.error("BUILD FAILED: Supabase returned 0 published articles. Refusing to deploy an empty guides section.");
+    process.exit(1);
+}
+for (const slug of Object.keys(articleSeo)) if (!articles.some((a) => a.slug === slug)) console.warn(`! data/article-seo.json has "${slug}", which is not a published article`);
+
+rmSync(DIST, { recursive: true, force: true });
+copyStatic();
 write("index.html", homePage());
 write("tools/index.html", toolsPage());
 write("shop/index.html", shopPage());
 write("guides/index.html", guidesPage());
+for (const a of articles) write(`guides/${a.slug}/index.html`, articlePage(a));
 write("about/index.html", aboutPage());
 write("disclosure/index.html", disclosurePage());
 write("contact.html", contactPage());
 write("privacy.html", legalPage({ file: "privacy", title: "Privacy Policy | Backyard with Ben", h1: "Privacy policy", lede: "What information Backyard with Ben collects, how it's used and the choices you have.", description: "Read the Backyard with Ben privacy policy: what we collect, how cookies work and the choices you have." }));
 write("terms.html", legalPage({ file: "terms", title: "Terms of Use | Backyard with Ben", h1: "Terms of use", lede: "The rules for using Backyard with Ben.", description: "Read the Backyard with Ben terms of use, including how affiliate links and site content work." }));
 write("404.html", notFoundPage());
-write("articles/view.html", articleShell("/articles/view.html"));
-write("articles/gardening-mistakes.html", articleShell("/articles/gardening-mistakes.html"));
-/* ready-made card HTML for the "Tools for this guide" blocks that
-   js/article-view.js adds to articles (ids per slug in data/article-seo.json) */
-write("data/product-cards.json", JSON.stringify(Object.fromEntries(products.map((p) => [p.id, productCard(p.id)]))) + "\n");
-updateSitemap();
-console.log(`Built pages, ${products.length} products.`);
+write("sitemap.xml", sitemapXml());
+write("robots.txt", robotsTxt());
+write("llms.txt", llmsTxt());
+write("llms-full.txt", llmsFullTxt());
+console.log(`Built ${articles.length} guides + static pages into dist/ (${products.length} products).`);

@@ -5,6 +5,10 @@
     "node": "24.x"
   },
   "scripts": {
-    "generate": "node scripts/build.mjs"
+    "build": "node scripts/build.mjs",
+    "preview": "node scripts/build.mjs && npx --yes serve@14.2.4 dist"
+  },
+  "dependencies": {
+    "sanitize-html": "2.17.0"
   }
 }

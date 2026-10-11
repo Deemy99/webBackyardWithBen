@@ -507,6 +507,7 @@ body.wb-cookie-open .wb-sticky-tools { display: none; }
 .wb-article-body .article-tags { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 2em; }
 .wb-article-body .article-tags span { color: var(--wb-text-muted); }
 .wb-article-body .article-tags a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border: 2px solid var(--wb-border); border-radius: 999px; text-decoration: none; background: var(--wb-surface); }
+.wb-article-dates { margin: 2em 0 0; padding-top: 14px; border-top: 2px dashed var(--wb-border); color: var(--wb-text-muted); font-size: .95rem; }
 .wb-article-extra { margin-block: var(--wb-space-6); }
 .wb-article-extra .wb-box { background: var(--wb-surface); border: 2px solid var(--wb-border); border-radius: var(--wb-radius-lg); padding: 22px 18px; box-shadow: var(--wb-shadow); }
 .wb-article-extra h2 { font-size: 1.5rem; display: flex; align-items: center; gap: 10px; }

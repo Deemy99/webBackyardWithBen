@@ -1,12 +1,7 @@
-# source / tooling files that the live site never serves
+# not needed for the build (scripts/build.mjs writes the site to dist/)
 .claude
 README.md
-scripts
-data/legal
-data/catalog.json
-data/products.json
+dist
 assets/images/uvodwoman.png
 assets/images/profilewoman.png
 assets/images/backyardwithbenLOGOaNAZEV.png
-data/product-types.json
-data/product-icons.mjs
