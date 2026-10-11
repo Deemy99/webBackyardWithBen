@@ -782,7 +782,8 @@ ${newsletterHtml()}`;
     return page({
         title: "About Backyard with Ben: Who We Are and Emma, Our AI Host",
         description: "Meet Emma, the AI-generated host of Backyard with Ben, and see how our team picks tools and products from specs, ratings and verified customer reviews.",
-        path: "/about", current: "/about", body, scripts: newsletterScripts + stickyToolsBtn
+        path: "/about", current: "/about", body, scripts: newsletterScripts + stickyToolsBtn,
+        jsonLd: breadcrumbLd([["About", "/about"]])
     });
 }
 
@@ -812,7 +813,8 @@ ${newsletterHtml()}`;
     return page({
         title: "Affiliate & AI Disclosure: How We Pick | Backyard with Ben",
         description: "How Backyard with Ben uses affiliate links, including the Amazon Associates program, how we pick products, and where we use AI-generated content and images.",
-        path: "/disclosure", current: "", body, scripts: newsletterScripts
+        path: "/disclosure", current: "", body, scripts: newsletterScripts,
+        jsonLd: breadcrumbLd([["Affiliate & AI disclosure", "/disclosure"]])
     });
 }
 
@@ -856,7 +858,8 @@ ${newsletterHtml()}`;
     return page({
         title: "Contact Backyard with Ben: Questions, Ideas & Feedback",
         description: "Questions about a tool pick or a backyard guide? Send the Backyard with Ben team a message with the contact form. We usually reply within 2-3 business days.",
-        path: "/contact.html", current: "", body, scripts: newsletterScripts + `\n<script src="/js/contact.js" defer></script>`
+        path: "/contact.html", current: "", body, scripts: newsletterScripts + `\n<script src="/js/contact.js" defer></script>`,
+        jsonLd: breadcrumbLd([["Contact", "/contact.html"]])
     });
 }
 
@@ -873,7 +876,7 @@ function legalPage({ file, title, h1, lede, description }) {
     </div>
 </section>
 ${newsletterHtml()}`;
-    return page({ title, description, path: `/${file}.html`, body, scripts: newsletterScripts });
+    return page({ title, description, path: `/${file}.html`, body, scripts: newsletterScripts, jsonLd: breadcrumbLd([[h1.replace(/^./, (c) => c.toUpperCase()), `/${file}.html`]]) });
 }
 
 function notFoundPage() {

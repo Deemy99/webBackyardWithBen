@@ -16,6 +16,7 @@ complete HTML without JavaScript.
 npm install
 npm run build                      # writes dist/
 npm run preview                    # build + serve dist/ at http://localhost:3000
+ARTICLES_JSON=rows.json npm run build   # offline build from a JSON export of the articles table
 ```
 
 The build **fails** if Supabase returns 0 published articles, so an empty guides section is never deployed.

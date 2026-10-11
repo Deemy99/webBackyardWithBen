@@ -22,6 +22,8 @@ function publicConfig() {
 }
 
 export async function fetchPublishedArticles() {
+    /* offline/preview builds: ARTICLES_JSON=/path/to/rows.json npm run build */
+    if (process.env.ARTICLES_JSON) return JSON.parse(readFileSync(process.env.ARTICLES_JSON, "utf-8"));
     const { url, key } = publicConfig();
     if (!url || !key) throw new Error("Supabase URL or public key not found");
     const res = await fetch(`${url}/rest/v1/articles?select=*&published=eq.true&order=published_at.desc`, {
