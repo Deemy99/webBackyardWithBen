@@ -127,7 +127,7 @@ const NAV = [
 ];
 
 const LOGO_W = 157;   /* width of logo-dark-h48 (aspect 3.267) */
-const brandLink = (h = 48) => `<a class="wb-brand" href="/" aria-label="Backyard with Ben, home"><picture><source type="image/webp" srcset="/assets/images/logo-dark-h${h === 48 ? "48" : "96"}.webp 1x, /assets/images/logo-dark-h${h === 48 ? "96" : "144"}.webp 2x"><img src="/assets/images/logo-dark-h${h === 48 ? "48" : "96"}.png" srcset="/assets/images/logo-dark-h${h === 48 ? "96" : "144"}.png 2x" width="${Math.round(h * 3.267)}" height="${h}" alt="Backyard with Ben"></picture></a>`;
+const brandLink = (h = 48) => `<a class="wb-brand" href="/" aria-label="Backyard with Ben, home"><picture><source type="image/webp" srcset="/assets/images/logo-dark-h${h === 48 ? "48" : "96"}.webp 1x, /assets/images/logo-dark-h${h === 48 ? "96" : "144"}.webp 2x"><img src="/assets/images/logo-dark-h${h === 48 ? "48" : "96"}.png" srcset="/assets/images/logo-dark-h${h === 48 ? "96" : "144"}.png 2x" width="${Math.round(h * 3.267)}" height="${h}" alt="Backyard with Ben"${h === 48 ? "" : ' loading="lazy" decoding="async"'}></picture></a>`;
 
 const headerHtml = (current = "", extraClass = "") => {
     const link = (href, label) => `<a href="${href}"${current === href ? ' aria-current="page"' : ""}>${esc(label)}</a>`;
@@ -592,7 +592,7 @@ ${tabBar("Tool categories", cats)}
 ${sections}
 ${newsletterHtml()}`;
     return page({
-        title: "Ben's Tools | Top Tool Picks for Backyard DIY | Backyard with Ben",
+        title: "Ben's Tools: Top Tool Picks for DIY | Backyard with Ben",
         description: "Our top tool picks for backyard DIY, chosen from specs, ratings and verified reviews: power tools, sanding, measuring, clamps, safety gear and a starter kit.",
         path: "/tools", current: "/tools", body, scripts: newsletterScripts,
         jsonLd: [breadcrumbLd([["Ben's Tools", "/tools"]]), productListLd("tools", "Ben's Tools: top tool picks for backyard DIY")]
@@ -621,8 +621,8 @@ ${tabBar("Shop categories", cats)}
 ${sections}
 ${newsletterHtml()}`;
     return page({
-        title: "Shop the Look | Planters, Beds, Lighting & More | Backyard with Ben",
-        description: "Don't want to build it yourself? Shop finished planters, raised beds, lighting, fire pits, furniture and decor we picked.",
+        title: "Shop the Look: Planters, Lighting & More | Backyard with Ben",
+        description: "Rather buy than build? Shop finished planters, raised beds, outdoor lighting, fire pits, patio furniture and decor, picked from specs and verified reviews.",
         path: "/shop", current: "/shop", body, scripts: newsletterScripts + stickyToolsBtn,
         jsonLd: [breadcrumbLd([["Shop the Look", "/shop"]]), productListLd("shop", "Shop the Look: finished backyard pieces")]
     });
@@ -648,7 +648,7 @@ ${tabBar("Guide categories", groups)}
 ${sections}
 ${newsletterHtml()}`;
     return page({
-        title: "Backyard Guides: Gardening, Lawn, BBQ & DIY | Backyard with Ben",
+        title: "Backyard Guides: Lawn, Garden, BBQ, DIY | Backyard with Ben",
         description: "Practical backyard guides on gardening, plants and trees, landscaping, lawn care, outdoor living, BBQ and grilling and weekend DIY projects, all in one place.",
         path: "/guides", current: "/guides", body,
         scripts: newsletterScripts + stickyToolsBtn,
@@ -780,8 +780,8 @@ ${tapeDivider}
 </section>
 ${newsletterHtml()}`;
     return page({
-        title: "About Emma, Our AI Host | Backyard with Ben",
-        description: "Meet Emma, the AI-generated host of Backyard with Ben, and learn how we pick products from specs, ratings and verified reviews.",
+        title: "About Backyard with Ben: Who We Are and Emma, Our AI Host",
+        description: "Meet Emma, the AI-generated host of Backyard with Ben, and see how our team picks tools and products from specs, ratings and verified customer reviews.",
         path: "/about", current: "/about", body, scripts: newsletterScripts + stickyToolsBtn
     });
 }
@@ -810,8 +810,8 @@ function disclosurePage() {
 </section>
 ${newsletterHtml()}`;
     return page({
-        title: "Affiliate & AI Disclosure | Backyard with Ben",
-        description: "How Backyard with Ben uses affiliate links, including the Amazon Associates program, and how we use AI-generated content.",
+        title: "Affiliate & AI Disclosure: How We Pick | Backyard with Ben",
+        description: "How Backyard with Ben uses affiliate links, including the Amazon Associates program, how we pick products, and where we use AI-generated content and images.",
         path: "/disclosure", current: "", body, scripts: newsletterScripts
     });
 }
@@ -854,8 +854,8 @@ ${tapeDivider}
 </section>
 ${newsletterHtml()}`;
     return page({
-        title: "Contact | Backyard with Ben",
-        description: "Questions about a tool or a guide? Send the Backyard with Ben team a message. We reply within a few business days.",
+        title: "Contact Backyard with Ben: Questions, Ideas & Feedback",
+        description: "Questions about a tool pick or a backyard guide? Send the Backyard with Ben team a message with the contact form. We usually reply within 2-3 business days.",
         path: "/contact.html", current: "", body, scripts: newsletterScripts + `\n<script src="/js/contact.js" defer></script>`
     });
 }
@@ -887,7 +887,7 @@ function notFoundPage() {
     </div>
 </section>
 ${newsletterHtml()}`;
-    return page({ title: "Page not found | Backyard with Ben", description: "This page could not be found.", path: "/404.html", body, scripts: newsletterScripts, robots: "noindex, follow" });
+    return page({ title: "Page not found | Backyard with Ben", description: "This page could not be found. Browse the backyard guides, tool picks and Shop the Look instead.", path: "/404.html", body, scripts: newsletterScripts, robots: "noindex, follow" });
 }
 
 
@@ -897,9 +897,9 @@ ${newsletterHtml()}`;
 const CHECKLISTS = [
     {
         path: "/checklists/beginner-tool-checklist",
-        title: "Beginner Backyard Tool Checklist (Printable) | Backyard with Ben",
+        title: "Beginner Tool Checklist (Printable) | Backyard with Ben",
         h1: "Beginner backyard tool checklist",
-        description: "A printable checklist of the tools a beginner needs for backyard DIY: safety gear, measuring, a drill, a saw, sanding and clamps, plus what can wait until later.",
+        description: "A printable checklist of the tools a beginner needs for backyard DIY: safety gear, measuring tools, a drill, a saw, clamps and sanding, plus what can wait.",
         lede: "The tools that cover most beginner backyard builds, like raised beds, planter boxes and privacy screens, in the order worth buying them. Print it and tick off what you already have.",
         groups: [
             ["Safety first", "/tools#safety-gear", ["Safety glasses (ANSI Z87.1 rated)", "Hearing protection: earmuffs or foam plugs for saws and sanders", "Dust mask or N95 respirator for sanding and cutting", "Work gloves for lumber, stone and soil (not when running a saw)"]],
@@ -1079,8 +1079,8 @@ for (const cl of CHECKLISTS) write(`${cl.path.slice(1)}/index.html`, checklistPa
 write("about/index.html", aboutPage());
 write("disclosure/index.html", disclosurePage());
 write("contact.html", contactPage());
-write("privacy.html", legalPage({ file: "privacy", title: "Privacy Policy | Backyard with Ben", h1: "Privacy policy", lede: "What information Backyard with Ben collects, how it's used and the choices you have.", description: "Read the Backyard with Ben privacy policy: what we collect, how cookies work and the choices you have." }));
-write("terms.html", legalPage({ file: "terms", title: "Terms of Use | Backyard with Ben", h1: "Terms of use", lede: "The rules for using Backyard with Ben.", description: "Read the Backyard with Ben terms of use, including how affiliate links and site content work." }));
+write("privacy.html", legalPage({ file: "privacy", title: "Privacy Policy: Data, Cookies & Choices | Backyard with Ben", h1: "Privacy policy", lede: "What information Backyard with Ben collects, how it's used and the choices you have.", description: "Read the Backyard with Ben privacy policy: what information we collect, how cookies and analytics work, and the choices you have about your personal data." }));
+write("terms.html", legalPage({ file: "terms", title: "Terms of Use and Affiliate Links | Backyard with Ben", h1: "Terms of use", lede: "The rules for using Backyard with Ben.", description: "Read the Backyard with Ben terms of use: the rules for using this site, how our affiliate links work and how you may use the guides and other site content." }));
 write("404.html", notFoundPage());
 write("sitemap.xml", sitemapXml());
 write("robots.txt", robotsTxt());

@@ -7,12 +7,12 @@
     {
       "source": "/articles/gardening-mistakes.html",
       "destination": "/guides/gardening-mistakes-time-money-blooms",
-      "permanent": true
+      "statusCode": 301
     },
     {
       "source": "/articles",
       "destination": "/guides",
-      "permanent": true
+      "statusCode": 301
     },
     {
       "source": "/projects",
