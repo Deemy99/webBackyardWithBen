@@ -5,23 +5,6 @@
   "trailingSlash": false,
   "redirects": [
     {
-      "source": "/articles/view.html",
-      "has": [
-        {
-          "type": "query",
-          "key": "slug",
-          "value": "(?<slug>[a-z0-9-]+)"
-        }
-      ],
-      "destination": "/guides/:slug",
-      "permanent": true
-    },
-    {
-      "source": "/articles/view.html",
-      "destination": "/guides",
-      "permanent": true
-    },
-    {
       "source": "/articles/gardening-mistakes.html",
       "destination": "/guides/gardening-mistakes-time-money-blooms",
       "permanent": true
@@ -68,6 +51,10 @@
     }
   ],
   "rewrites": [
+    {
+      "source": "/articles/view.html",
+      "destination": "/api/legacy-article"
+    },
     {
       "source": "/contact",
       "destination": "/contact.html"
