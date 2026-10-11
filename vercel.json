@@ -10,11 +10,6 @@
       "permanent": true
     },
     {
-      "source": "/articles/:slug.html",
-      "destination": "/guides/:slug",
-      "permanent": true
-    },
-    {
       "source": "/articles",
       "destination": "/guides",
       "permanent": true

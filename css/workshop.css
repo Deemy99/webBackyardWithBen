@@ -757,3 +757,25 @@ body.wb-cookie-open .wb-sticky-tools { display: none; }
     .wb-prod__media { padding: 8px 6px; gap: 4px; }
     .wb-prod__type { font-size: .68rem; padding: 3px 7px; }
 }
+
+/* ---------- Round 7: quick answer, tables, printable checklists ---------- */
+.wb-article-body .article-quick-answer { background: var(--wb-surface); border: 2px solid var(--wb-accent); border-radius: var(--wb-radius-md); padding: 18px 20px; margin: 0 0 2em; }
+.wb-article-body .article-quick-answer h2 { font-size: 1.25rem; margin: 0 0 .4em; color: var(--wb-cedar-300); }
+.wb-article-body .article-quick-answer p { margin: 0; }
+.wb-article-body table, .wb-table-wrap table { width: 100%; border-collapse: collapse; font-size: 1rem; line-height: 1.5; }
+.wb-article-body table { display: block; overflow-x: auto; margin: 1.4em 0; }
+.wb-article-body th, .wb-article-body td, .wb-table-wrap th, .wb-table-wrap td { border: 1px solid var(--wb-border); padding: 10px 12px; text-align: left; vertical-align: top; }
+.wb-article-body thead th, .wb-table-wrap thead th { background: var(--wb-surface-2); font-weight: 700; }
+.wb-table-wrap { overflow-x: auto; margin: 1.4em 0; max-width: 100% !important; min-width: 0; }
+.wb-table-wrap table { min-width: 620px; }
+.wb-table-wrap tbody th { white-space: nowrap; }
+.wb-checklist { list-style: none; padding: 0; display: grid; gap: 6px; margin: 0 0 .6em; }
+.wb-checklist li { display: flex; align-items: flex-start; gap: 12px; min-height: 44px; padding: 8px 12px; border: 2px solid var(--wb-border); border-radius: var(--wb-radius-md); background: var(--wb-surface); }
+.wb-checklist input { width: 20px; height: 20px; margin-top: 3px; flex: none; accent-color: var(--wb-accent); }
+.wb-printable h2 { margin-top: 1.4em; }
+@media print {
+    .wb-header, .wb-footer, #newsletter, .wb-print-hide, .wb-sticky-tools, .wb-skip, .wb-cookie { display: none !important; }
+    body.wb { background: #fff !important; color: #000 !important; }
+    .wb-printable *, .wb-table-wrap * { color: #000 !important; background: #fff !important; box-shadow: none !important; }
+    .wb-checklist li, .wb-table-wrap th, .wb-table-wrap td { border-color: #999 !important; }
+}

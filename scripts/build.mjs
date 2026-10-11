@@ -892,13 +892,84 @@ ${newsletterHtml()}`;
 
 
 /* ---------------------------------------------------------
+   PRINTABLE CHECKLISTS (linkable assets, see OFF-PAGE-SEO-PLAN.md)
+--------------------------------------------------------- */
+const CHECKLISTS = [
+    {
+        path: "/checklists/beginner-tool-checklist",
+        title: "Beginner Backyard Tool Checklist (Printable) | Backyard with Ben",
+        h1: "Beginner backyard tool checklist",
+        description: "A printable checklist of the tools a beginner needs for backyard DIY: safety gear, measuring, a drill, a saw, sanding and clamps, plus what can wait until later.",
+        lede: "The tools that cover most beginner backyard builds, like raised beds, planter boxes and privacy screens, in the order worth buying them. Print it and tick off what you already have.",
+        groups: [
+            ["Safety first", "/tools#safety-gear", ["Safety glasses (ANSI Z87.1 rated)", "Hearing protection: earmuffs or foam plugs for saws and sanders", "Dust mask or N95 respirator for sanding and cutting", "Work gloves for lumber, stone and soil (not when running a saw)"]],
+            ["Measure and mark", "/tools#hand-tools-measuring", ["25 ft tape measure", "Speed square for square cuts and marking angles", "Level (a 2 ft or torpedo level is enough to start)", "Carpenter's pencil", "Utility knife"]],
+            ["Power tools", "/tools#power-tools", ["Cordless drill/driver with a set of drill and driver bits", "Circular saw for cutting boards to length", "Extra battery, so one can charge while you work", "Jigsaw for curves (optional at first)"]],
+            ["Hold it together", "/tools#clamps-joinery", ["Two bar clamps (12–24 in)", "Exterior-rated wood screws or deck screws", "Exterior wood glue (water-resistant, e.g. Type I or II)"]],
+            ["Sand and finish", "/tools#sanding-finishing", ["Random orbit sander", "Sanding discs: 80, 120 and 180 grit", "Exterior stain or sealer, brush and rags"]],
+            ["Can wait until later", "/tools#starter-kit", ["Pocket-hole jig", "Miter saw", "Oscillating multi-tool"]]
+        ],
+        related: ["raised-garden-bed", "diy-backyard-privacy-screen-ideas", "build-backyard-fire-pit", "easy-diy-backyard-upgrades-weekend"],
+        note: "Always follow the manufacturer's safety instructions for every tool. Unplug corded tools or remove the battery before changing blades or bits."
+    },
+    {
+        path: "/checklists/lawn-care-calendar",
+        title: "Lawn Care Calendar: Month-by-Month Guide | Backyard with Ben",
+        h1: "Lawn care calendar",
+        description: "A printable lawn care calendar for cool-season and warm-season grass: when to fertilize, overseed, apply pre-emergent, mow higher and water, season by season.",
+        lede: "What to do for your lawn each season, for cool-season grasses (northern lawns) and warm-season grasses (southern lawns). Exact timing depends on your local climate, so check your frost dates or local extension service.",
+        table: {
+            head: ["Season", "Cool-season grass (fescue, bluegrass, ryegrass)", "Warm-season grass (Bermuda, zoysia, St. Augustine, centipede)"],
+            rows: [
+                ["Early spring", "Rake out debris. Apply pre-emergent crabgrass control when soil temperatures reach about 55°F. Service the mower and sharpen the blade.", "Rake out debris. Apply pre-emergent when soil reaches about 55°F. Wait for the lawn to green up before fertilizing."],
+                ["Late spring", "Light feeding if needed. Start mowing at the high end of the recommended height. Spot-treat broadleaf weeds.", "Fertilize once the lawn is fully green and actively growing. Best time to seed, sod or plug bare spots."],
+                ["Summer", "Mow high and water deeply but less often (about 1 inch a week including rain). Avoid heavy fertilizing in heat. Watch for grubs.", "Peak growth: mow often, fertilize per label, water deeply in dry spells. Good time to dethatch or core aerate."],
+                ["Early fall", "Best time to core aerate, overseed and fertilize. Keep new seed moist until it is established.", "Last feeding about 6–8 weeks before the first expected frost. Stop aerating and dethatching."],
+                ["Late fall", "Final fertilizer application before the ground freezes (common for northern lawns). Keep mowing until growth stops. Remove fallen leaves.", "Lawn goes dormant and turns tan. Keep leaves off the grass. Apply pre-emergent for winter weeds if they are a problem."],
+                ["Winter", "Stay off frozen or frosty grass. Clean and store tools.", "Water dormant grass lightly during long dry spells. Plan spring repairs."]
+            ]
+        },
+        related: ["best-time-to-fertilize-lawn", "how-to-overseed-a-lawn", "get-rid-of-weeds-in-lawn", "lawn-care-mistakes"],
+        note: "Always follow the label on fertilizer, weed control and seed. The label is the legal and safe rate. Timing shifts with your climate: your local cooperative extension service publishes a calendar for your area."
+    }
+];
+
+function checklistPage(cl) {
+    const bySlug = new Map(articles.map((a) => [a.slug, a]));
+    const related = cl.related.map((s) => bySlug.get(s)).filter(Boolean);
+    const content = cl.groups
+        ? cl.groups.map(([h, href, items], gi) => `<h2>${esc(h)}</h2>
+        <ul class="wb-checklist">${items.map((t, i) => `<li><input type="checkbox" id="cl-${gi}-${i}"><label for="cl-${gi}-${i}">${esc(t)}</label></li>`).join("")}</ul>
+        <p class="wb-print-hide"><a href="${href}">See our ${esc(h.toLowerCase())} picks</a></p>`).join("\n")
+        : `<div class="wb-table-wrap"><table><thead><tr>${cl.table.head.map((t) => `<th scope="col">${esc(t)}</th>`).join("")}</tr></thead><tbody>${cl.table.rows.map(([s, ...cells]) => `<tr><th scope="row">${esc(s)}</th>${cells.map((c) => `<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+    const body = `
+<section class="wb-section">
+    <div class="wb-container wb-prose wb-printable">
+        <nav class="wb-crumbs wb-print-hide" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">›</span><a href="/guides">Guides</a></nav>
+        <span class="wb-eyebrow">Free printable</span>
+        <h1>${esc(cl.h1)}</h1>
+        <p class="wb-lede">${esc(cl.lede)}</p>
+        <p class="wb-print-hide"><button class="wb-btn wb-btn--sm" type="button" onclick="window.print()">Print this page</button></p>
+        ${content}
+        <p class="wb-article-dates">${esc(cl.note)} From <strong>Backyard with Ben</strong>, ${SITE.replace("https://", "")}${cl.path}</p>
+    </div>
+</section>
+${related.length ? `<section class="wb-section wb-section--alt wb-print-hide" aria-labelledby="cl-rel-h"><div class="wb-container"><h2 id="cl-rel-h">Related guides</h2><div class="wb-grid wb-grid--3 wb-grid--guides">${related.map((a) => guideCard(a, true)).join("")}</div></div></section>` : ""}
+${newsletterHtml()}`;
+    return page({
+        title: cl.title, description: cl.description, path: cl.path, body, scripts: newsletterScripts,
+        jsonLd: breadcrumbLd([["Guides", "/guides"], [cl.h1.replace(/^./, (c) => c.toUpperCase()), cl.path]])
+    });
+}
+
+/* ---------------------------------------------------------
    SITEMAP (indexable pages only, articles with lastmod + image)
 --------------------------------------------------------- */
 function sitemapXml() {
     const entry = (path, extra = "") => `  <url>\n    <loc>${SITE}${path}</loc>\n${extra}  </url>\n`;
     const latest = articles.reduce((m, a) => (a.updated_at > m ? a.updated_at : m), articles[0].updated_at);
     let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n`;
-    xml += entry("/") + entry("/tools") + entry("/shop") + entry("/guides", `    <lastmod>${isoDay(latest)}</lastmod>\n`) + entry("/about");
+    xml += entry("/") + entry("/tools") + entry("/shop") + entry("/guides", `    <lastmod>${isoDay(latest)}</lastmod>\n`) + entry("/about") + CHECKLISTS.map((c) => entry(c.path)).join("");
     for (const a of articles) {
         const c = cover(a);
         xml += entry(guideUrl(a.slug), `    <lastmod>${isoDay(a.updated_at || a.published_at)}</lastmod>\n` +
@@ -959,6 +1030,7 @@ Backyard with Ben (${SITE}) publishes practical, beginner-friendly backyard guid
 - [Shop the Look](${SITE}/shop): finished planters, raised beds, lighting, fire pits, furniture and decor
 - [About](${SITE}/about): who is behind the site and how picks are made
 - [Affiliate & AI disclosure](${SITE}/disclosure)
+${CHECKLISTS.map((c) => `- [${c.h1.replace(/^./, (x) => x.toUpperCase())}](${SITE}${c.path}): ${c.description}`).join("\n")}
 
 ${groups.map((g) => `## ${g.title}\n\n${g.items.map((a) => `- [${a.title}](${SITE}${guideUrl(a.slug)}): ${a.meta_description || a.excerpt || ""}`).join("\n")}`).join("\n\n")}
 
@@ -1003,6 +1075,7 @@ write("tools/index.html", toolsPage());
 write("shop/index.html", shopPage());
 write("guides/index.html", guidesPage());
 for (const a of articles) write(`guides/${a.slug}/index.html`, articlePage(a));
+for (const cl of CHECKLISTS) write(`${cl.path.slice(1)}/index.html`, checklistPage(cl));
 write("about/index.html", aboutPage());
 write("disclosure/index.html", disclosurePage());
 write("contact.html", contactPage());
